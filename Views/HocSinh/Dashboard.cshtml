@@ -1,0 +1,188 @@
+﻿@model QLSV.Models.StudentDashboardVM
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+<div class="container-fluid py-3">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+        <div>
+            <h4 class="mb-1 fw-bold">Xin chào, @Model.TenHocSinh 👋</h4>
+            <div class="text-muted">
+                Lớp: <span class="fw-semibold">@Model.TenLopHoc</span>
+                @if (!string.IsNullOrWhiteSpace(Model.NamHoc))
+                {
+                    <span class="mx-2">•</span>
+                
+                    <span>Năm học: <span class="fw-semibold">@Model.NamHoc</span></span>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.TenGiaoVienChuNhiem))
+                {
+                    <span class="mx-2">•</span>
+                
+                    <span>GVCN: <span class="fw-semibold">@Model.TenGiaoVienChuNhiem</span></span>
+                }
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <a asp-controller="HocSinh" asp-action="Profile" class="btn btn-outline-primary">
+                <i class="bi bi-person-badge me-1"></i> Hồ sơ
+            </a>
+            <a asp-controller="HocSinh" asp-action="DiemTongKet" class="btn btn-info text-white">
+                <i class="bi bi-bar-chart me-1"></i> Xem điểm
+            </a>
+        </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small">Điểm TB (tổng hợp)</div>
+                        <div class="fs-2 fw-bold">
+                            @(Model.DiemTrungBinhTongHop.HasValue? Model.DiemTrungBinhTongHop.Value.ToString("0.00") : "—")
+                        </div>
+                        <div class="small text-muted">Từ điểm mới nhất mỗi môn</div>
+                    </div>
+                    <div class="fs-2 text-info"><i class="bi bi-graph-up"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small">Số môn có điểm</div>
+                        <div class="fs-2 fw-bold">@Model.SoMonCoDiem</div>
+                        <div class="small text-muted">Theo bảng BangDiem</div>
+                    </div>
+                    <div class="fs-2 text-primary"><i class="bi bi-journal-check"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small">Cập nhật gần nhất</div>
+                        <div class="fw-bold">
+                            @(Model.CapNhatGanNhat.HasValue? Model.CapNhatGanNhat.Value.ToString("dd/MM/yyyy HH:mm") : "—")
+                        </div>
+                        <div class="small text-muted">Trường ngayCapNhat</div>
+                    </div>
+                    <div class="fs-2 text-warning"><i class="bi bi-clock-history"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Recent updates -->
+        <div class="col-12 col-xl-7">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+                    <div class="fw-bold">
+                        <i class="bi bi-bell me-1 text-danger"></i> Điểm cập nhật gần đây
+                    </div>
+                </div>
+
+                <div class="card-body pt-0">
+                    @if (Model.DiemCapNhatGanDay.Count == 0)
+                    {
+                        <div class="alert alert-info mb-0">Chưa có dữ liệu điểm.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle table-hover">
+                                <thead class="small text-muted">
+                                    <tr>
+                                        <th>Môn</th>
+                                        <th class="text-center">15'</th>
+                                        <th class="text-center">45'</th>
+                                        <th class="text-center">HK</th>
+                                        <th class="text-center">Tổng hợp</th>
+                                        <th class="text-end">Cập nhật</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var x in Model.DiemCapNhatGanDay)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@x.TenMonHoc</td>
+                                            <td class="text-center">@((x.Diem15?.ToString("0.0")) ?? "—")</td>
+                                            <td class="text-center">@((x.Diem45?.ToString("0.0")) ?? "—")</td>
+                                            <td class="text-center">@((x.DiemHocKi?.ToString("0.0")) ?? "—")</td>
+                                            <td class="text-center fw-bold">@((x.DiemTongHop?.ToString("0.00")) ?? "—")</td>
+                                            <td class="text-end text-muted small">@((x.NgayCapNhat?.ToString("dd/MM HH:mm")) ?? "—")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest by subject -->
+        <div class="col-12 col-xl-5">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+                    <div class="fw-bold">
+                        <i class="bi bi-list-check me-1 text-primary"></i> Điểm mới nhất theo môn
+                    </div>
+                </div>
+
+                <div class="card-body pt-0">
+                    @if (Model.DiemMoiNhatTheoMon.Count == 0)
+                    {
+                        <div class="alert alert-info mb-0">Chưa có dữ liệu điểm.</div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var s in Model.DiemMoiNhatTheoMon)
+                            {
+                                <div class="list-group-item d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="fw-semibold">@s.TenMonHoc</div>
+                                        <div class="small text-muted">
+                                            Kì @s.KiHoc
+                                            @if (!string.IsNullOrWhiteSpace(s.NamHoc))
+                                            {
+                                                <span class="mx-1">•</span>
+                                                <span>@s.NamHoc</span> 
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(s.TenGiaoVien))
+                                            {
+                                                <span class="mx-1">•</span>
+                                                <span>@s.TenGiaoVien</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end">
+                                        <span class="badge text-bg-info fs-6">@((s.DiemTongHop?.ToString("0.00")) ?? "—")</span>
+                                        <div class="small text-muted mt-1">@((s.NgayCapNhat?.ToString("dd/MM")) ?? "")</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="small text-muted mt-2">
+                            * Tổng hợp = 15’(1) + 45’(2) + HK(3) (tự bỏ qua cột thiếu).
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

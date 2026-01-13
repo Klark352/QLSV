@@ -1,0 +1,65 @@
+﻿@model QLSV.Models.LoginVM
+@{
+    Layout = null;
+    var returnUrl = ViewBag.ReturnUrl as string;
+}
+
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Đăng nhập - QLSV</title>
+    <link rel="stylesheet" href="~/lte/css/adminlte.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+</head>
+<body class="bg-body-tertiary">
+
+    <div class="container d-flex align-items-center justify-content-center" style="min-height:100vh;">
+        <div class="card shadow-sm border-0" style="max-width:420px;width:100%;border-radius:18px;">
+            <div class="card-body p-4">
+                <div class="text-center mb-3">
+                    <div class="fs-4 fw-bold text-info">HỆ THỐNG QUẢN LÝ SINH VIÊN</div>
+                    <div class="text-muted">Đăng nhập hệ thống</div>
+                </div>
+
+                <form asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Tên tài khoản</label>
+                        <input asp-for="TenTaiKhoan" class="form-control" autocomplete="username" />
+                        <span asp-validation-for="TenTaiKhoan" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu</label>
+                        <input asp-for="MatKhau" type="password" class="form-control" autocomplete="current-password" />
+                        <span asp-validation-for="MatKhau" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="form-check">
+                            <input asp-for="GhiNho" class="form-check-input" />
+                            <label class="form-check-label">Ghi nhớ</label>
+                        </div>
+                    </div>
+
+                    <div class="text-danger small mb-2">
+                        @Html.ValidationSummary(false)
+                    </div>
+
+                    <button type="submit" class="btn btn-info text-white w-100" style="border-radius:14px;">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

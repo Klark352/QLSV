@@ -1,0 +1,320 @@
+﻿<!doctype html>
+<html lang="vi">
+<!--begin::Head-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>QLSV - Quản trị viên</title>
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="QLSV - Quản trị viên" />
+    <meta name="author" content="QLSV" />
+    <meta name="description" content="Hệ thống quản lý sinh viên - Trang quản trị" />
+    <!--end::Primary Meta Tags-->
+    <!--begin::Fonts-->
+    <link rel="stylesheet"
+          href="~/lte/css/index.css"
+          integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+          crossorigin="anonymous"
+          media="print"
+          onload="this.media='all'" />
+    <!--end::Fonts-->
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+          crossorigin="anonymous" />
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+          crossorigin="anonymous" />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+    <!--begin::Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!--end::Font Awesome-->
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="~/lte/css/adminlte.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <!--end::Required Plugin(AdminLTE)-->
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+        <!--begin::Header-->
+        <nav class="app-header navbar navbar-expand bg-body">
+            <!--begin::Container-->
+            <div class="container-fluid">
+                <!--begin::Start Navbar Links-->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </li>
+                </ul>
+                <!--end::Start Navbar Links-->
+                <!--begin::End Navbar Links-->
+                <ul class="navbar-nav ms-auto">
+                    <!--begin::Fullscreen Toggle-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+                            <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                            <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
+                        </a>
+                    </li>
+                    <!--end::Fullscreen Toggle-->
+                    <!--begin::Realtime Clock-->
+                    <li class="nav-item d-none d-md-flex align-items-center me-2">
+                        <span id="liveClock" class="live-clock"></span>
+                    </li>
+                    <!--end::Realtime Clock-->
+                    <!--begin::User Menu Dropdown-->
+                    <li class="nav-item dropdown user-menu">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img src="~/lte/assets/img/user2-160x160.jpg"
+                                 class="user-image rounded-circle shadow"
+                                 alt="User Image" />
+                            <span class="d-none d-md-inline">Quản trị viên</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                            <!--begin::User Image-->
+                            <li class="user-header text-bg-primary">
+                                <img src="~/lte/assets/img/user2-160x160.jpg"
+                                     class="rounded-circle shadow"
+                                     alt="User Image" />
+                                <p>
+                                    Quản trị viên
+                                    <small>Toàn quyền hệ thống</small>
+                                </p>
+                            </li>
+                            <!--end::User Image-->
+                            <!--begin::Menu Body-->
+                            <li class="user-body">
+                                <div class="user-action-list">
+                                     <a asp-controller="Auth" asp-action="Logout"
+                                       class="action-item action-logout">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span>Đăng xuất</span>
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                            <!--end::Menu Body-->
+                        </ul>
+                    </li>
+                    <!--end::User Menu Dropdown-->
+                </ul>
+                <!--end::End Navbar Links-->
+            </div>
+            <!--end::Container-->
+        </nav>
+        <!--end::Header-->
+        <!--begin::Sidebar-->
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+            <!--begin::Sidebar Brand-->
+            <div class="sidebar-brand">
+                <!--begin::Brand Link-->
+                <a asp-controller="Home" asp-action="Index" class="brand-link">
+                    <i class="fas fa-graduation-cap brand-icon"></i>
+                    <!--begin::Brand Text-->
+                    <span class="brand-text fw-light">QLSV - ADMIN</span>
+                    <!--end::Brand Text-->
+                </a>
+                <!--end::Brand Link-->
+            </div>
+            <!--end::Sidebar Brand-->
+            <!--begin::Sidebar Wrapper-->
+            <div class="sidebar-wrapper">
+                <nav class="mt-2">
+                    <!--begin::Sidebar Menu-->
+                    <ul class="nav nav-pills sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+                        <!--begin::Dashboard-->
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Trang chủ</p>
+                            </a>
+                        </li>
+                        <!--end::Dashboard-->
+                        <!--begin::Quản lý học sinh-->
+                        <li class="nav-item">
+                            <a asp-controller="HocSinh" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-user-graduate"></i>
+                                <p>Quản lý học sinh</p>
+                            </a>
+                        </li>
+                        <!--end::Quản lý học sinh-->
+                        <!--begin::Quản lý giáo viên-->
+                        <li class="nav-item">
+                            <a asp-controller="GiaoVien" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                <p>Quản lý giáo viên</p>
+                            </a>
+                        </li>
+                        <!--end::Quản lý giáo viên-->
+                        <!--begin::Quản lý lớp học-->
+                        <li class="nav-item">
+                            <a asp-controller="LopHoc" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-school"></i>
+                                <p>Quản lý lớp học</p>
+                            </a>
+                        </li>
+                        <!--end::Quản lý lớp học-->
+                        <!--begin::Quản lý môn học-->
+                        <li class="nav-item">
+                            <a asp-controller="MonHoc" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Quản lý môn học</p>
+                            </a>
+                        </li>
+                        <!--end::Quản lý môn học-->
+                        <!--begin::Quản lý bảng điểm-->
+                        <li class="nav-item">
+                            <a asp-controller="BangDiem" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-clipboard-list"></i>
+                                <p>Quản lý bảng điểm</p>
+                            </a>
+                        </li>
+                        <!--end::Quản lý bảng điểm-->
+                        <!--begin::Quản lý tài khoản-->
+                        <li class="nav-item">
+                            <a asp-controller="TaiKhoan" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>Quản lý tài khoản</p>
+                            </a>
+                        </li>
+                        <!--end::Quản lý tài khoản-->
+                        <!--begin::Báo cáo & Thống kê-->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <p>
+                                    Báo cáo & Thống kê
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="BaoCao" asp-action="ThongKeHocSinh" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>Thống kê học sinh</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="BaoCao" asp-action="ThongKeGiaoVien" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>Thống kê giáo viên</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="BaoCao" asp-action="ThongKeDiem" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>Thống kê điểm</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--end::Báo cáo & Thống kê-->
+                    </ul>
+                    <!--end::Sidebar Menu-->
+                </nav>
+            </div>
+            <!--end::Sidebar Wrapper-->
+        </aside>
+        <!--end::Sidebar-->
+        <!--begin::App Main-->
+        <main class="app-main">
+            @RenderBody()
+        </main>
+        <!--end::App Main-->
+        <!--begin::Footer-->
+        <footer class="app-footer">
+            <!--begin::To the end-->
+            <div class="float-end d-none d-sm-inline">Phiên bản 1.0</div>
+            <!--end::To the end-->
+            <!--begin::Copyright-->
+            <strong>
+                Copyright &copy; 2025&nbsp;
+                <a href="#" class="text-decoration-none">Hệ thống QLSV</a>.
+            </strong>
+            All rights reserved.
+            <!--end::Copyright-->
+        </footer>
+        <!--end::Footer-->
+    </div>
+    <!--end::App Wrapper-->
+    <!--begin::Script-->
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+            crossorigin="anonymous"></script>
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+    <!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script src="~/lte/js/popper.min.js" crossorigin="anonymous"></script>
+    <!--end::Required Plugin(popperjs for Bootstrap 5)-->
+    <!--begin::Required Plugin(Bootstrap 5)-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+            crossorigin="anonymous"></script>
+    <!--end::Required Plugin(Bootstrap 5)-->
+    <!--begin::Required Plugin(AdminLTE)-->
+    <script src="~/lte/js/adminlte.js"></script>
+    <!--end::Required Plugin(AdminLTE)-->
+    <!--begin::OverlayScrollbars Configure-->
+    <script>
+        const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+        const Default = {
+            scrollbarTheme: 'os-theme-light',
+            scrollbarAutoHide: 'leave',
+            scrollbarClickScroll: true,
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+            if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+                OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                    scrollbars: {
+                        theme: Default.scrollbarTheme,
+                        autoHide: Default.scrollbarAutoHide,
+                        clickScroll: Default.scrollbarClickScroll,
+                    },
+                });
+            }
+        });
+    </script>
+    <!--begin::Realtime Clock-->
+    <script>
+        function startLiveClock() {
+            const el = document.getElementById('liveClock');
+            if (!el) return;
+
+            const fmtTime = new Intl.DateTimeFormat('vi-VN', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+            const fmtDate = new Intl.DateTimeFormat('vi-VN', {
+                weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit'
+            });
+
+            const tick = () => {
+                const now = new Date();
+                el.innerHTML = `<i class="bi bi-clock"></i> ${fmtTime.format(now)} <span style="opacity:.75">•</span> ${fmtDate.format(now)}`;
+            };
+
+            tick();
+            setInterval(tick, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            startLiveClock();
+        });
+    </script>
+    <!--end::Realtime Clock-->
+    <!--end::OverlayScrollbars Configure-->
+    <!--end::Script-->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+<!--end::Body-->
+</html>
