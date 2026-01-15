@@ -1,8 +1,77 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.GiaoVien>
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Quản lý giáo viên";
+    var q = ViewBag.Query as string;
+    int pageNumber = ViewBag.Page ?? 1;
+    int pageSize = ViewBag.PageSize ?? 20;
+    int total = ViewBag.Total ?? Model.Count();
 }
+
 <div class="p-3">
-    <h4 class="fw-bold mb-3">Quản lý giáo viên</h4>
-    <div class="alert alert-info mb-0">Placeholder: danh sách, tìm kiếm, thêm/sửa/xóa giáo viên.</div>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h4 class="fw-bold mb-0">Quản lý giáo viên</h4>
+        <a class="btn btn-primary" asp-action="CreateGiaoVien" asp-controller="Admin">
+            <i class="bi bi-plus-lg me-1"></i> Thêm giáo viên
+        </a>
+    </div>
+
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+
+    <form class="row g-2 mb-3" method="get">
+        <div class="col-md-4">
+            <input name="q" value="@q" class="form-control" placeholder="Tìm theo tên" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-outline-primary w-100" type="submit"><i class="bi bi-search"></i> Tìm</button>
+        </div>
+    </form>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tên giáo viên</th>
+                            <th>Giới tính</th>
+                            <th>Ngày sinh</th>
+                            <th>Số điện thoại</th>
+                            <th class="text-end">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr><td colspan="5" class="text-center text-muted py-4">Chưa có dữ liệu.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var gv in Model)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@gv.TenGiaoVien</td>
+                                    <td>@gv.GioiTinh</td>
+                                    <td>@gv.NgaySinh.ToString("dd/MM/yyyy")</td>
+                                    <td>@gv.SoDienThoai</td>
+                                    <td class="text-end">
+                                        <a class="btn btn-sm btn-outline-secondary" asp-action="EditGiaoVien" asp-route-id="@gv.IdGiaoVien"><i class="bi bi-pencil"></i></a>
+                                        <form asp-action="DeleteGiaoVien" asp-route-id="@gv.IdGiaoVien" method="post" class="d-inline" onsubmit="return confirm('Xóa giáo viên này?');">
+                                            @Html.AntiForgeryToken()
+                                            <button class="btn btn-sm btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 text-muted small">Tổng: @total • Trang @pageNumber</div>
 </div>

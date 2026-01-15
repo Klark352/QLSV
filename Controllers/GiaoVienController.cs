@@ -1,19 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using QLSV.Entity;
 
 namespace QLSV.Controllers
 {
     [Authorize(Roles = "GiaoVien")]
     public class GiaoVienController : Controller
     {
+        private readonly QlsvContext _db;
+
+        public GiaoVienController(QlsvContext db)
+        {
+            _db = db;
+        }
+
         private void SetHeaderInfoFromClaims()
         {
             ViewBag.TenGiaoVien = User.FindFirstValue("TenGiaoVien") ?? User.Identity?.Name ?? "Giáo viên";
             ViewBag.MonHoc = User.FindFirstValue("MonHoc") ?? "";
         }
 
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
             SetHeaderInfoFromClaims();
             return View();
