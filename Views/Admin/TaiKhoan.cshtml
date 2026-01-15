@@ -1,8 +1,52 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.TaiKhoan>
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Quản lý tài khoản";
 }
 <div class="p-3">
     <h4 class="fw-bold mb-3">Quản lý tài khoản</h4>
-    <div class="alert alert-info mb-0">Placeholder: tạo/khóa/mở khóa tài khoản, đặt vai trò, reset mật khẩu.</div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tên tài khoản</th>
+                        <th>Quyền</th>
+                        <th>Trạng thái</th>
+                        <th>Liên kết</th>
+                        <th>Cập nhật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="5" class="text-center text-muted py-3">Chưa có tài khoản.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var tk in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@tk.TenTaiKhoan</td>
+                                <td>@tk.PhanQuyen</td>
+                                <td>@(tk.TrangThai == 1 ? "Hoạt động" : "Bị khóa")</td>
+                                <td>
+                                    @if (tk.HocSinh != null)
+                                    {
+                                        <span class="badge bg-info">Học sinh</span>
+                                    }
+                                    else if (tk.GiaoVien != null)
+                                    {
+                                        <span class="badge bg-success">Giáo viên</span>
+                                    }
+                                </td>
+                                <td>@tk.NgayCapNhat.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

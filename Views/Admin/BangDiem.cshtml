@@ -1,8 +1,45 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.BangDiem>
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Quản lý bảng điểm";
 }
 <div class="p-3">
     <h4 class="fw-bold mb-3">Quản lý bảng điểm</h4>
-    <div class="alert alert-info mb-0">Placeholder: xem/duyệt lịch sử điểm, thay đổi, xuất báo cáo.</div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Học sinh</th>
+                        <th>Môn</th>
+                        <th>15'</th>
+                        <th>45'</th>
+                        <th>HK</th>
+                        <th>Cập nhật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="text-center text-muted py-3">Chưa có dữ liệu điểm.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var b in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@b.IdHocSinhNavigation?.TenHocSinh</td>
+                                <td>@b.IdMonHocNavigation?.TenMonHoc</td>
+                                <td>@(b.Diem15phut?.ToString("0.0") ?? "")</td>
+                                <td>@(b.Diem45phut?.ToString("0.0") ?? "")</td>
+                                <td>@(b.DiemHocKi?.ToString("0.0") ?? "")</td>
+                                <td>@b.NgayCapNhat.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

@@ -265,13 +265,68 @@ namespace QLSV.Controllers
             return RedirectToAction(nameof(GiaoVien));
         }
 
-        public IActionResult LopHoc() => View();
-        public IActionResult MonHoc() => View();
-        public IActionResult BangDiem() => View();
-        public IActionResult TaiKhoan() => View();
+        public async Task<IActionResult> LopHoc()
+        {
+            var items = await _db.LopHocs
+                .AsNoTracking()
+                .Include(x => x.IdGiaoVienChuNhiemNavigation)
+                .OrderBy(x => x.TenLopHoc)
+                .ToListAsync();
+            return View(items);
+        }
 
-        public IActionResult ThongKeHocSinh() => View();
-        public IActionResult ThongKeGiaoVien() => View();
-        public IActionResult ThongKeDiem() => View();
+        public async Task<IActionResult> MonHoc()
+        {
+            var items = await _db.MonHocs
+                .AsNoTracking()
+                .Include(x => x.IdGiaoVienNavigation)
+                .OrderBy(x => x.TenMonHoc)
+                .ToListAsync();
+            return View(items);
+        }
+
+        public async Task<IActionResult> BangDiem()
+        {
+            var items = await _db.BangDiems
+                .AsNoTracking()
+                .Include(x => x.IdHocSinhNavigation)
+                .Include(x => x.IdMonHocNavigation)
+                .OrderByDescending(x => x.NgayCapNhat)
+                .Take(100)
+                .ToListAsync();
+            return View(items);
+        }
+
+        public async Task<IActionResult> TaiKhoan()
+        {
+            var items = await _db.TaiKhoans
+                .AsNoTracking()
+                .Include(x => x.HocSinh)
+                .Include(x => x.GiaoVien)
+                .OrderBy(x => x.TenTaiKhoan)
+                .ToListAsync();
+            return View(items);
+        }
+
+        public async Task<IActionResult> ThongKeHocSinh()
+        {
+            ViewBag.TongHocSinh = await _db.HocSinhs.CountAsync();
+            ViewBag.TongLop = await _db.LopHocs.CountAsync();
+            return View();
+        }
+
+        public async Task<IActionResult> ThongKeGiaoVien()
+        {
+            ViewBag.TongGiaoVien = await _db.GiaoViens.CountAsync();
+            ViewBag.TongMon = await _db.MonHocs.CountAsync();
+            return View();
+        }
+
+        public async Task<IActionResult> ThongKeDiem()
+        {
+            ViewBag.TongBangDiem = await _db.BangDiems.CountAsync();
+            ViewBag.CapNhatGanNhat = await _db.BangDiems.MaxAsync(b => (DateTime?)b.NgayCapNhat);
+            return View();
+        }
     }
 }

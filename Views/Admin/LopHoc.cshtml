@@ -1,8 +1,41 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.LopHoc>
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Quản lý lớp học";
 }
 <div class="p-3">
     <h4 class="fw-bold mb-3">Quản lý lớp học</h4>
-    <div class="alert alert-info mb-0">Placeholder: danh sách lớp, gán GVCN, thêm/sửa/xóa lớp.</div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tên lớp</th>
+                        <th>Khối</th>
+                        <th>Năm học</th>
+                        <th>GVCN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="4" class="text-center text-muted py-3">Chưa có lớp.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var lop in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@lop.TenLopHoc</td>
+                                <td>@lop.TenKhoi</td>
+                                <td>@lop.NamHoc</td>
+                                <td>@lop.IdGiaoVienChuNhiemNavigation?.TenGiaoVien</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
