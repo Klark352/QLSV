@@ -103,13 +103,6 @@
                                         <i class="bi bi-chevron-right"></i>
                                     </a>
 
-                                    <a asp-controller="HocSinh" asp-action="DoiMatKhau"
-                                       class="action-item action-password">
-                                        <i class="bi bi-shield-lock"></i>
-                                        <span>Đổi mật khẩu</span>
-                                        <i class="bi bi-chevron-right"></i>
-                                    </a>
-
                                     <a asp-controller="Auth" asp-action="Logout"
                                        class="action-item action-logout">
                                         <i class="bi bi-box-arrow-right"></i>
@@ -163,102 +156,14 @@
                             </a>
                         </li>
                         <!--end::Thông tin cá nhân-->
-                        <!--begin::Thời khóa biểu-->
-                        <li class="nav-item">
-                            <a asp-controller="HocSinh" asp-action="ThoiKhoaBieu" class="nav-link">
-                                <i class="nav-icon fas fa-calendar-alt"></i>
-                                <p>Thời khóa biểu</p>
-                            </a>
-                        </li>
-                        <!--end::Thời khóa biểu-->
-                        <!--begin::Lịch thi-->
-                        <li class="nav-item">
-                            <a asp-controller="HocSinh" asp-action="LichThi" class="nav-link">
-                                <i class="nav-icon fas fa-calendar-check"></i>
-                                <p>Lịch thi</p>
-                            </a>
-                        </li>
-                        <!--end::Lịch thi-->
-                        <!--begin::Lớp học-->
-                        <li class="nav-item">
-                            <a asp-controller="HocSinh" asp-action="LopHoc" class="nav-link">
-                                <i class="nav-icon fas fa-school"></i>
-                                <p>Thông tin lớp học</p>
-                            </a>
-                        </li>
-                        <!--end::Lớp học-->
-                        <!--begin::Môn học-->
-                        <li class="nav-item">
-                            <a asp-controller="HocSinh" asp-action="MonHoc" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>Môn học</p>
-                            </a>
-                        </li>
-                        <!--end::Môn học-->
-                        <!--begin::Giáo viên-->
-                        <li class="nav-item">
-                            <a asp-controller="HocSinh" asp-action="GiaoVien" class="nav-link">
-                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                <p>Giáo viên</p>
-                            </a>
-                        </li>
-                        <!--end::Giáo viên-->
                         <!--begin::Xem điểm-->
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a asp-controller="HocSinh" asp-action="Diem" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
-                                <p>
-                                    Xem điểm
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
+                                <p>Xem điểm</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="HocSinh" asp-action="DiemHocKi1" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Điểm học kỳ 1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="HocSinh" asp-action="DiemHocKi2" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Điểm học kỳ 2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="HocSinh" asp-action="DiemTongKet" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Điểm tổng kết</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <!--end::Xem điểm-->
-                        <!--begin::Kết quả học tập-->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-chart-line"></i>
-                                <p>
-                                    Kết quả học tập
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="HocSinh" asp-action="XepHangLop" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Xếp hạng lớp</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="HocSinh" asp-action="BaoCaoHocTap" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Hạnh kiểm</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--end::Kết quả học tập-->
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>
@@ -273,10 +178,10 @@
         <!--end::App Main-->
         <!--begin::Footer-->
         <footer class="app-footer">
-            <div class="float-end d-none d-sm-inline">Học sinh</div>
+            <div class="float-end d-none d-sm-inline">Sinh viên</div>
             <strong>
                 Copyright &copy; 2025&nbsp;
-                <a href="#" class="text-decoration-none">Hệ thống QLSV</a>.
+                <a href="#" class="text-decoration-none">Hệ thống Quản lý Sinh viên</a>.
             </strong>
             All rights reserved.
         </footer>
@@ -347,52 +252,110 @@
             startLiveClock();
         });
     </script>
-
-    <!-- ===== (OPTION) Lưu trạng thái menu-open mà KHÔNG tự toggle ===== -->
     <script>
         (function () {
-            const KEY = "openMenus_v2";
+          const KEY = "openMenus_v2";
 
-            function getKey(li) {
-                // ổn định hơn: ưu tiên data-menu-key nếu có
-                return li.getAttribute("data-menu-key")
-                    || li.querySelector(":scope > .nav-link p")?.textContent?.trim()
-                    || "";
-            }
+          function getKey(li) {
+            return li.getAttribute("data-menu-key")
+              || li.querySelector(":scope > .nav-link p")?.textContent?.trim()
+              || "";
+          }
 
-            function saveState() {
-                const openKeys = [];
-                document.querySelectorAll(".sidebar-menu .nav-item.menu-open").forEach(li => {
-                    const k = getKey(li);
-                    if (k) openKeys.push(k);
-                });
-                localStorage.setItem(KEY, JSON.stringify(openKeys));
-            }
-
-            function loadState() {
-                const openKeys = JSON.parse(localStorage.getItem(KEY) || "[]");
-                document.querySelectorAll(".sidebar-menu .nav-item").forEach(li => {
-                    const hasTree = li.querySelector(":scope > .nav-treeview");
-                    if (!hasTree) return;
-                    const k = getKey(li);
-                    if (k && openKeys.includes(k)) li.classList.add("menu-open");
-                });
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
-                loadState();
-
-                // chỉ lắng nghe click để lưu trạng thái,
-                // KHÔNG can thiệp AdminLTE toggle
-                document.querySelectorAll(".sidebar-menu .nav-item > .nav-link").forEach(a => {
-                    a.addEventListener("click", function () {
-                        // đợi AdminLTE toggle xong rồi lưu
-                        setTimeout(saveState, 0);
-                    });
-                });
+          function saveState() {
+            const openKeys = [];
+            document.querySelectorAll(".sidebar-menu .nav-item.menu-open").forEach(li => {
+              const k = getKey(li);
+              if (k) openKeys.push(k);
             });
+            localStorage.setItem(KEY, JSON.stringify(openKeys));
+          }
+
+          function loadState() {
+            const openKeys = JSON.parse(localStorage.getItem(KEY) || "[]");
+            document.querySelectorAll(".sidebar-menu .nav-item").forEach(li => {
+              const hasTree = li.querySelector(":scope > .nav-treeview");
+              if (!hasTree) return;
+              const k = getKey(li);
+              if (k && openKeys.includes(k)) li.classList.add("menu-open");
+            });
+          }
+
+          function setActiveByUrl() {
+            const currentPath = window.location.pathname.replace(/\/+$/, "").toLowerCase() || "/";
+
+            const links = Array.from(document.querySelectorAll(".app-sidebar .sidebar-menu .nav-link[href]"))
+              .filter(a => {
+                const href = a.getAttribute("href");
+                return href && href !== "#" && !href.startsWith("javascript:");
+              });
+
+            // chỉ xoá ACTIVE, KHÔNG xoá menu-open (để giữ mở)
+            document.querySelectorAll(".app-sidebar .sidebar-menu .nav-link.active")
+              .forEach(a => a.classList.remove("active"));
+
+            let best = null;
+            let bestLen = -1;
+
+            for (const a of links) {
+              const linkPath = new URL(a.getAttribute("href"), window.location.origin).pathname
+                .replace(/\/+$/, "").toLowerCase() || "/";
+
+              const isMatch =
+                (linkPath === "/" && currentPath === "/") ||
+                (linkPath !== "/" && (currentPath === linkPath || currentPath.startsWith(linkPath + "/")));
+
+              if (isMatch && linkPath.length > bestLen) {
+                best = a;
+                bestLen = linkPath.length;
+              }
+            }
+
+            if (best) {
+              best.classList.add("active");
+
+              // mở toàn bộ cha lên tới root (submenu không bị thu)
+              let li = best.closest(".nav-item");
+              while (li) {
+                li.classList.add("menu-open");
+                const parentTree = li.parentElement?.closest(".nav-item");
+                li = parentTree || null;
+              }
+
+              // active luôn link cha nếu đang ở submenu
+              const tree = best.closest(".nav-treeview");
+              if (tree) {
+                const parentLink = tree.closest(".nav-item")?.querySelector(":scope > .nav-link");
+                if (parentLink) parentLink.classList.add("active");
+              }
+            }
+          }
+
+          document.addEventListener("DOMContentLoaded", function () {
+            // A) khôi phục trạng thái mở trước (menu-open)
+            loadState();
+
+            // B) set active theo URL (không phá menu-open)
+            setActiveByUrl();
+
+            // C) click submenu: không cho toggle cha (tránh thu vào)
+            document.querySelectorAll(".app-sidebar .nav-treeview .nav-link").forEach(sub => {
+              sub.addEventListener("click", function (e) {
+                e.stopPropagation();
+              });
+            });
+
+            // D) mỗi lần click menu cha thì lưu trạng thái sau khi AdminLTE toggle
+            document.querySelectorAll(".sidebar-menu .nav-item > .nav-link").forEach(a => {
+              a.addEventListener("click", function () {
+                setTimeout(saveState, 0);
+              });
+            });
+          });
         })();
     </script>
+
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

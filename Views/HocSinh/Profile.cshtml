@@ -1,0 +1,156 @@
+﻿@model ProfileViewModel
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<div class="content-wrapper p-3">
+    <div class="container-fluid">
+
+        <!-- Cover / Header -->
+        <div class="profile-cover p-3 p-md-4 shadow-sm mb-3">
+            <div class="d-flex flex-column flex-md-row align-items-center gap-3">
+
+                <img src="~/lte/assets/img/user2-160x160.jpg" class="rounded-circle profile-avatar" alt="avatar" />
+
+                <div class="flex-grow-1 text-center text-md-start">
+                    @{
+                        var status = Model.TaiKhoan?.TrangThai ?? 1;
+                        var role = Model.TaiKhoan?.PhanQuyen ?? "Học sinh";
+                    }
+
+                    <div class="d-flex flex-column flex-md-row align-items-center align-items-md-end gap-2">
+                        <h4 class="mb-0 fw-bold">@Model.HocSinh?.TenHocSinh</h4>
+                        <span class="badge @(status == 1 ? "bg-success" : "bg-secondary")">
+                            @(status == 1 ? "Đang hoạt động" : "Tạm khóa")
+                        </span>
+                    </div>
+
+                    <div class="text-muted mt-1">
+                        <i class="fas fa-school me-1"></i>
+                        Lớp <b>@Model.LopHoc?.TenLopHoc</b>
+                        <span class="mx-1">•</span>
+                        Khối <b>@Model.LopHoc?.TenKhoi</b>
+                        <span class="mx-1">•</span>
+                        Năm học <b>@Model.LopHoc?.NamHoc</b>
+                    </div>
+                </div>
+
+                <div class="text-center text-md-end">
+                    <div class="text-muted small">Mã học sinh</div>
+                    <div class="fw-bold fs-5">#@Model.HocSinh?.IdHocSinh</div>
+                    <div class="text-muted small mt-1">
+                        Ngày tạo: <b>@(Model.HocSinh?.NgayTao.ToString("dd/MM/yyyy") ?? "—")</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card shadow-sm" style="border-radius:14px;">
+            <div class="card-header bg-white d-flex align-items-center"
+                 style="border-top-left-radius:14px;border-top-right-radius:14px;">
+
+                <div class="fw-bold">
+                    <i class="fas fa-id-card me-2"></i>Thông tin cá nhân
+                </div>
+
+                <div class="ms-auto text-end text-muted small">
+                    <i class="fas fa-lock me-1"></i> Dữ liệu hiển thị theo tài khoản của bạn
+                </div>
+            </div>
+
+
+            <div class="card-body">
+                <div class="row g-3 align-items-stretch">
+                    <!-- Left: personal details + notice -->
+                    <div class="col-12 col-lg-8 d-flex flex-column">
+                        <!-- 4 tiles -->
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <div class="tile">
+                                    <div class="label">Họ tên</div>
+                                    <div class="value">@Model.HocSinh?.TenHocSinh</div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="tile">
+                                    <div class="label">Giới tính</div>
+                                    <div class="value">@Model.HocSinh?.GioiTinh</div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="tile">
+                                    <div class="label">Ngày sinh</div>
+                                    <div class="value">@Model.HocSinh?.NgaySinh?.ToString("dd/MM/yyyy")</div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="tile">
+                                    <div class="label">Tài khoản</div>
+                                    <div class="value">@Model.TaiKhoan?.TenTaiKhoan</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notice goes into the empty space (left side) -->
+                        <div class="notice-card mt-3 flex-grow-1 d-flex align-items-center">
+                            <div class="d-flex gap-3">
+                                <div class="notice-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold mb-1">Lưu ý</div>
+                                    <div class="text-muted">
+                                        Nếu phát hiện sai thông tin (họ tên/ngày sinh/lớp), hãy báo cho GVCN để được cập nhật kịp thời.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: class / homeroom -->
+                    <div class="col-12 col-lg-4">
+                        <div class="tile h-100">
+                            <div class="fw-bold mb-2">
+                                <i class="fas fa-layer-group me-1"></i> Thông tin lớp
+                            </div>
+
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Lớp</span>
+                                <span class="fw-semibold">@Model.LopHoc?.TenLopHoc</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Khối</span>
+                                <span class="fw-semibold">@Model.LopHoc?.TenKhoi</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Năm học</span>
+                                <span class="fw-semibold">@Model.LopHoc?.NamHoc</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between py-2">
+                                <span class="text-muted">GVCN</span>
+                                <span class="fw-semibold">@Model.GVCN?.TenGiaoVien</span>
+                            </div>
+
+                            <div class="mt-3 d-grid gap-2">
+                                <a class="btn btn-outline-primary" href="@Url.Action("ThoiKhoaBieu", "HocSinh")">
+                                    <i class="fas fa-calendar me-1"></i> Xem thời khóa biểu
+                                </a>
+                                <a class="btn btn-outline-secondary" href="@Url.Action("Diem", "HocSinh")">
+                                    <i class="fas fa-clipboard-list me-1"></i> Xem bảng điểm
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

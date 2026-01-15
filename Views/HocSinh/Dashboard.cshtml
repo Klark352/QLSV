@@ -4,185 +4,485 @@
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 }
 
-<div class="container-fluid py-3">
+@functions {
+    string Badge(double v) => v >= 8 ? "excellent" : v >= 6.5 ? "good" : v >= 5 ? "average" : "poor";
+}
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
-        <div>
-            <h4 class="mb-1 fw-bold">Xin chào, @Model.TenHocSinh 👋</h4>
-            <div class="text-muted">
-                Lớp: <span class="fw-semibold">@Model.TenLopHoc</span>
-                @if (!string.IsNullOrWhiteSpace(Model.NamHoc))
-                {
-                    <span class="mx-2">•</span>
-                
-                    <span>Năm học: <span class="fw-semibold">@Model.NamHoc</span></span>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.TenGiaoVienChuNhiem))
-                {
-                    <span class="mx-2">•</span>
-                
-                    <span>GVCN: <span class="fw-semibold">@Model.TenGiaoVienChuNhiem</span></span>
-                }
+<div class="dashboard-container">
+
+    <!-- Welcome -->
+    <div class="welcome-header">
+        <h1>👋 Xin chào, @Model.TenHocSinh!</h1>
+
+        <div class="welcome-info">
+            <div class="info-badge">
+                <i class="fas fa-school"></i>
+                <span>Lớp: <strong>@Model.TenLopHoc</strong></span>
             </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.NamHoc))
+            {
+                <div class="info-badge">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Năm học: <strong>@Model.NamHoc</strong></span>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.TenGiaoVienChuNhiem))
+            {
+                <div class="info-badge">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>GVCN: <strong>@Model.TenGiaoVienChuNhiem</strong></span>
+                </div>
+            }
         </div>
 
-        <div class="d-flex gap-2 mt-2 mt-md-0">
-            <a asp-controller="HocSinh" asp-action="Profile" class="btn btn-outline-primary">
-                <i class="bi bi-person-badge me-1"></i> Hồ sơ
+        <div class="quick-actions">
+            <a asp-controller="HocSinh" asp-action="Profile" class="action-btn outline">
+                <i class="bi bi-person-badge"></i><span>Hồ sơ cá nhân</span>
             </a>
-            <a asp-controller="HocSinh" asp-action="DiemTongKet" class="btn btn-info text-white">
-                <i class="bi bi-bar-chart me-1"></i> Xem điểm
+            <a asp-controller="HocSinh" asp-action="Diem" class="action-btn primary">
+                <i class="bi bi-bar-chart"></i><span>Xem bảng điểm</span>
             </a>
         </div>
     </div>
 
-    <!-- Stat cards -->
-    <div class="row g-3 mb-3">
-        <div class="col-12 col-md-6 col-xl-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="text-muted small">Điểm TB (tổng hợp)</div>
-                        <div class="fs-2 fw-bold">
-                            @(Model.DiemTrungBinhTongHop.HasValue? Model.DiemTrungBinhTongHop.Value.ToString("0.00") : "—")
-                        </div>
-                        <div class="small text-muted">Từ điểm mới nhất mỗi môn</div>
-                    </div>
-                    <div class="fs-2 text-info"><i class="bi bi-graph-up"></i></div>
+    <!-- Row 1: stat cards -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 row-cols-xl-4 g-3 mb-4">
+        <div class="col">
+            <div class="stat-card primary animate-in h-100">
+                <div class="stat-icon primary"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-content">
+                    <div class="stat-label">Điểm TB</div>
+                    <div class="stat-value">@((Model.DiemTrungBinhTongHop.HasValue) ? Model.DiemTrungBinhTongHop.Value.ToString("0.00") : "—")</div>
+                    <div class="stat-description">Tổng hợp</div>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="text-muted small">Số môn có điểm</div>
-                        <div class="fs-2 fw-bold">@Model.SoMonCoDiem</div>
-                        <div class="small text-muted">Theo bảng BangDiem</div>
-                    </div>
-                    <div class="fs-2 text-primary"><i class="bi bi-journal-check"></i></div>
+        <div class="col">
+            <div class="stat-card success animate-in h-100">
+                <div class="stat-icon success"><i class="fas fa-book-open"></i></div>
+                <div class="stat-content">
+                    <div class="stat-label">Số môn</div>
+                    <div class="stat-value">@Model.SoMonCoDiem</div>
+                    <div class="stat-description">Có điểm</div>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="text-muted small">Cập nhật gần nhất</div>
-                        <div class="fw-bold">
-                            @(Model.CapNhatGanNhat.HasValue? Model.CapNhatGanNhat.Value.ToString("dd/MM/yyyy HH:mm") : "—")
-                        </div>
-                        <div class="small text-muted">Trường ngayCapNhat</div>
+        <div class="col">
+            <div class="stat-card warning animate-in h-100">
+                <div class="stat-icon warning"><i class="fas fa-trophy"></i></div>
+                <div class="stat-content">
+                    <div class="stat-label">Xếp loại</div>
+                    <div class="stat-value" style="font-size:1.4rem;">
+                        @{
+                            var dtb = Model.DiemTrungBinhTongHop ?? 0;
+                            var xepLoai = dtb >= 8.5 ? "Giỏi" : dtb >= 6.5 ? "Khá" : dtb >= 5.0 ? "Trung bình" : "Yếu";
+                        }
+                        @xepLoai
                     </div>
-                    <div class="fs-2 text-warning"><i class="bi bi-clock-history"></i></div>
+                    <div class="stat-description">Học lực</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="stat-card danger animate-in h-100">
+                <div class="stat-icon danger"><i class="fas fa-clock"></i></div>
+                <div class="stat-content">
+                    <div class="stat-label">Cập nhật</div>
+                    <div class="stat-value" style="font-size:1rem;">
+                        @(Model.CapNhatGanNhat.HasValue? Model.CapNhatGanNhat.Value.ToString("dd/MM/yy") : "—")
+                    </div>
+                    <div class="stat-description">
+                        @(Model.CapNhatGanNhat.HasValue? Model.CapNhatGanNhat.Value.ToString("HH:mm") : "Chưa có")
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-3">
-        <!-- Recent updates -->
-        <div class="col-12 col-xl-7">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
-                    <div class="fw-bold">
-                        <i class="bi bi-bell me-1 text-danger"></i> Điểm cập nhật gần đây
+    <!-- Row 2: phân bố điểm -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="row g-3">
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card success animate-in">
+                        <div class="stat-icon success" style="width:50px;height:50px;font-size:1.5rem;"><i class="fas fa-medal"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-label">Môn đạt Giỏi</div>
+                            <div class="stat-value">@Model.DiemGioi</div>
+                            <div class="progress-container">
+                                <div class="progress-bar-custom">
+                                    <div class="progress-fill" style="width:@(Model.SoMonCoDiem > 0 ? (Model.DiemGioi * 100.0 / Model.SoMonCoDiem) : 0)%;"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="stat-description">≥ 8.0 điểm</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card-body pt-0">
-                    @if (Model.DiemCapNhatGanDay.Count == 0)
-                    {
-                        <div class="alert alert-info mb-0">Chưa có dữ liệu điểm.</div>
-                    }
-                    else
-                    {
-                        <div class="table-responsive">
-                            <table class="table align-middle table-hover">
-                                <thead class="small text-muted">
-                                    <tr>
-                                        <th>Môn</th>
-                                        <th class="text-center">15'</th>
-                                        <th class="text-center">45'</th>
-                                        <th class="text-center">HK</th>
-                                        <th class="text-center">Tổng hợp</th>
-                                        <th class="text-end">Cập nhật</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var x in Model.DiemCapNhatGanDay)
-                                    {
-                                        <tr>
-                                            <td class="fw-semibold">@x.TenMonHoc</td>
-                                            <td class="text-center">@((x.Diem15?.ToString("0.0")) ?? "—")</td>
-                                            <td class="text-center">@((x.Diem45?.ToString("0.0")) ?? "—")</td>
-                                            <td class="text-center">@((x.DiemHocKi?.ToString("0.0")) ?? "—")</td>
-                                            <td class="text-center fw-bold">@((x.DiemTongHop?.ToString("0.00")) ?? "—")</td>
-                                            <td class="text-end text-muted small">@((x.NgayCapNhat?.ToString("dd/MM HH:mm")) ?? "—")</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card info animate-in">
+                        <div class="stat-icon info" style="width:50px;height:50px;font-size:1.5rem;"><i class="fas fa-thumbs-up"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-label">Môn đạt Khá</div>
+                            <div class="stat-value">@Model.DiemKha</div>
+                            <div class="progress-container">
+                                <div class="progress-bar-custom">
+                                    <div class="progress-fill" style="width:@(Model.SoMonCoDiem > 0 ? (Model.DiemKha * 100.0 / Model.SoMonCoDiem) : 0)%;"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="stat-description">6.5 - 7.9 điểm</div>
                         </div>
-                    }
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card warning animate-in">
+                        <div class="stat-icon warning" style="width:50px;height:50px;font-size:1.5rem;"><i class="fas fa-hand-peace"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-label">Môn Trung bình</div>
+                            <div class="stat-value">@Model.DiemTrungBinh</div>
+                            <div class="progress-container">
+                                <div class="progress-bar-custom">
+                                    <div class="progress-fill" style="width:@(Model.SoMonCoDiem > 0 ? (Model.DiemTrungBinh * 100.0 / Model.SoMonCoDiem) : 0)%;"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="stat-description">5.0 - 6.4 điểm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card danger animate-in">
+                        <div class="stat-icon danger" style="width:50px;height:50px;font-size:1.5rem;"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-label">Cần cải thiện</div>
+                            <div class="stat-value">@Model.DiemYeu</div>
+                            <div class="progress-container">
+                                <div class="progress-bar-custom">
+                                    <div class="progress-fill" style="width:@(Model.SoMonCoDiem > 0 ? (Model.DiemYeu * 100.0 / Model.SoMonCoDiem) : 0)%;"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="stat-description">&lt; 5.0 điểm</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Latest by subject -->
-        <div class="col-12 col-xl-5">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
-                    <div class="fw-bold">
-                        <i class="bi bi-list-check me-1 text-primary"></i> Điểm mới nhất theo môn
+    <!-- Row 3: Thông tin nhanh - Gợi ý - Rank -->
+    <div class="row g-3 mb-4 align-items-stretch">
+        <!-- Cột trái: Thông tin nhanh + Gợi ý (stack) -->
+        <div class="col-12 col-xl-3 order-1">
+            <div class="d-flex flex-column gap-3 h-100">
+
+                <!-- Thông tin nhanh (đưa lên trước) -->
+                <div class="content-card animate-in">
+                    <div class="content-card-header">
+                        <h2 class="content-card-title mb-0">
+                            <i class="fas fa-circle-info primary"></i> Thông tin nhanh
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="dash-subtle">Điểm TB</div>
+                            <b>@((Model.DiemTrungBinhTongHop?.ToString("0.00")) ?? "—")</b>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="dash-subtle">Cập nhật</div>
+                            <b>@(Model.CapNhatGanNhat.HasValue? Model.CapNhatGanNhat.Value.ToString("dd/MM HH:mm") : "—")</b>
+                        </div>
+                        <hr />
+                        <div class="info-note mt-3">
+                            <i class="fas fa-calculator"></i>
+                            <small>
+                                <strong>Công thức:</strong>
+                                <br />
+                                ĐTB = (15' × 0.1 + 45' × 0.3 + HK × 0.6)
+                            </small>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card-body pt-0">
-                    @if (Model.DiemMoiNhatTheoMon.Count == 0)
+                <!-- Gợi ý học tập -->
+                <div class="content-card animate-in">
+                    <div class="content-card-header">
+                        <h2 class="content-card-title mb-0">
+                            <i class="fas fa-lightbulb warning"></i> Gợi ý học tập
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        @if (Model.Top3MonCanCaiThien != null && Model.Top3MonCanCaiThien.Count > 0)
+                        {
+                            var weak = Model.Top3MonCanCaiThien.First();
+                            <div style="font-weight:700; margin-bottom:8px;">@weak.TenMonHoc</div>
+                            <div class="dash-subtle" style="margin-bottom:12px;">
+                                Điểm hiện tại: <span style="font-weight:700;">@(weak.DiemTongHop?.ToString("0.00") ?? "—")</span>
+                                <br />Ưu tiên ôn 45' & HK theo tỉ trọng.
+                            </div>
+                            <hr />
+                            <div class="dash-subtle">
+                                ✓ Ôn 20–30 phút <br />
+                                ✓ Làm 3 bài tập ngắn <br />
+                                ✓ Ghi chú lỗi sai
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="font-weight:700; margin-bottom:8px;">Tuyệt vời! 🎉</div>
+                            <div class="dash-subtle">Bạn không có môn nào cần cải thiện.</div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Cột phải: Rank cao bằng (Thông tin nhanh + Gợi ý) -->
+        <div class="col-12 col-xl-9 order-2">
+            <div class="h-100">
+                <!-- Rank -->
+                @await Html.PartialAsync("_RankSummary", Model)
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Row 4: Top môn học - Chia đôi -->
+    <div class="row g-3 mb-4">
+        <!-- Top điểm cao (≥ 7.0) -->
+        <div class="col-12 col-xl-6">
+            <div class="content-card animate-in" style="height:100%;">
+                <div class="content-card-header">
+                    <h2 class="content-card-title mb-0">
+                        <i class="fas fa-star success"></i> Top môn điểm cao
+                    </h2>
+                </div>
+
+                <div class="content-card-body">
+                    @{
+                        var topDiemCao = Model.Top3MonDiemCao?.Where(x => x.DiemTongHop >= 7.0).ToList();
+                        if (topDiemCao == null) { topDiemCao = new List<SubjectScoreItem>(); }
+                    }
+
+                    @if (topDiemCao.Count == 0)
                     {
-                        <div class="alert alert-info mb-0">Chưa có dữ liệu điểm.</div>
+                        <div class="empty-state" style="padding:18px 0;">
+                            <i class="fas fa-award"></i>
+                            <div class="empty-state-title">Chưa có dữ liệu</div>
+                            <div class="empty-state-text">Các môn đạt ≥ 7.0 điểm sẽ hiển thị tại đây</div>
+                        </div>
                     }
                     else
                     {
-                        <div class="list-group list-group-flush">
-                            @foreach (var s in Model.DiemMoiNhatTheoMon)
-                            {
-                                <div class="list-group-item d-flex align-items-center justify-content-between">
+                        @for (int i = 0; i < topDiemCao.Count; i++)
+                        {
+                            var item = topDiemCao[i];
+                            var rank = i + 1;
+                            var score = item.DiemTongHop ?? 0;
+                            var badgeClass = score >= 8.0 ? "excellent" : "good";
+                            var badgeText = score >= 8.0 ? "Giỏi" : "Khá";
+
+                            <div class="dash-list-row">
+                                <div style="display:flex; align-items:flex-start; gap:10px;">
+                                    <span class="dash-pill" style="background:rgba(34,197,94,.14); color:#166534;">#@rank</span>
+
                                     <div>
-                                        <div class="fw-semibold">@s.TenMonHoc</div>
-                                        <div class="small text-muted">
-                                            Kì @s.KiHoc
-                                            @if (!string.IsNullOrWhiteSpace(s.NamHoc))
-                                            {
-                                                <span class="mx-1">•</span>
-                                                <span>@s.NamHoc</span> 
-                                            }
-                                            @if (!string.IsNullOrWhiteSpace(s.TenGiaoVien))
-                                            {
-                                                <span class="mx-1">•</span>
-                                                <span>@s.TenGiaoVien</span>
-                                            }
+                                        <div style="font-weight:700;">@item.TenMonHoc</div>
+                                        <div class="dash-mini">
+                                            <i class="fas fa-user-tie"></i>
+                                            @(string.IsNullOrWhiteSpace(item.TenGiaoVien) ? "—" : item.TenGiaoVien)
+                                            <span class="mx-2">•</span>
+                                            Kỳ @item.KiHoc
                                         </div>
                                     </div>
-
-                                    <div class="text-end">
-                                        <span class="badge text-bg-info fs-6">@((s.DiemTongHop?.ToString("0.00")) ?? "—")</span>
-                                        <div class="small text-muted mt-1">@((s.NgayCapNhat?.ToString("dd/MM")) ?? "")</div>
-                                    </div>
                                 </div>
-                            }
-                        </div>
 
-                        <div class="small text-muted mt-2">
-                            * Tổng hợp = 15’(1) + 45’(2) + HK(3) (tự bỏ qua cột thiếu).
+                                <div style="text-align:right;">
+                                    <div class="dash-score" style="color:#16A34A;">@(item.DiemTongHop?.ToString("0.00") ?? "—")</div>
+                                    <span class="custom-badge @badgeClass mt-1">@badgeText</span>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="info-note mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Điểm cao:</strong> Giỏi (≥8.0) • Khá (7.0-7.9)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top cần cải thiện -->
+        <div class="col-12 col-xl-6">
+            <div class="content-card animate-in" style="height:100%;">
+                <div class="content-card-header">
+                    <h2 class="content-card-title mb-0">
+                        <i class="fas fa-chart-line warning"></i> Top cần cải thiện
+                    </h2>
+                </div>
+
+                <div class="content-card-body">
+                    @if (Model.Top3MonCanCaiThien == null || Model.Top3MonCanCaiThien.Count == 0)
+                    {
+                        <div class="empty-state" style="padding:18px 0;">
+                            <i class="fas fa-clipboard-check"></i>
+                            <div class="empty-state-title">Tuyệt vời!</div>
+                            <div class="empty-state-text">Không có môn nào cần cải thiện</div>
                         </div>
                     }
+                    else
+                    {
+                        @for (int i = 0; i < Model.Top3MonCanCaiThien.Count; i++)
+                        {
+                            var item = Model.Top3MonCanCaiThien[i];
+                            var score = item.DiemTongHop ?? 0;
+                            var badgeClass = score >= 6.5 ? "good" : score >= 5.0 ? "average" : "poor";
+                            var rank = i + 1;
+
+                            <div class="dash-list-row">
+                                <div style="display:flex; align-items:flex-start; gap:10px;">
+                                    <span class="dash-pill" style="background:rgba(245,158,11,.14); color:#92400E;">#@rank</span>
+
+                                    <div>
+                                        <div style="font-weight:700;">@item.TenMonHoc</div>
+                                        <div class="dash-mini">
+                                            <i class="fas fa-user-tie"></i>
+                                            @(string.IsNullOrWhiteSpace(item.TenGiaoVien) ? "—" : item.TenGiaoVien)
+                                            <span class="mx-2">•</span>
+                                            Kỳ @item.KiHoc
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="text-align:right;">
+                                    <div class="dash-score">@(item.DiemTongHop?.ToString("0.00") ?? "—")</div>
+                                    <span class="custom-badge @badgeClass mt-1">
+                                        @(score >= 6.5 ? "Trung bình khá" : score >= 5.0 ? "Trung bình" : "Cần cố gắng")
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="info-note mt-3">
+                        <i class="fas fa-calculator"></i>
+                        <strong>Điểm cần cải thiện:</strong> &lt; 7.0
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Row 5: AJAX paging -->
+    <div class="row g-3">
+        <div class="col-12 col-xl-7" id="recentContainer">
+            @await Html.PartialAsync("_RecentScoresTable", Model)
+        </div>
+
+        <div class="col-12 col-xl-5" id="subjectContainer">
+            @await Html.PartialAsync("_LatestBySubjectList", Model)
+        </div>
+    </div>
 </div>
+
+<script>
+    // Intersection Observer for animations
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.stat-card, .content-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+    // Animate progress bars
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(() => {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => bar.style.width = width, 100);
+            });
+        }, 350);
+    });
+</script>
+
+<script>
+    async function loadRecent(page, size) {
+        try {
+            const url = `@Url.Action("RecentScoresPartial", "HocSinh")?recentPage=${page}&recentPageSize=${size}`;
+            const res = await fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } });
+            const html = await res.text();
+            if (!res.ok) return;
+            document.getElementById('recentContainer').innerHTML = html;
+        } catch (err) {
+            console.error("Recent error:", err);
+        }
+    }
+
+    async function loadSubject(page, size) {
+        try {
+            const url = `@Url.Action("LatestBySubjectPartial", "HocSinh")?subjectPage=${page}&subjectPageSize=${size}`;
+            const res = await fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } });
+            const html = await res.text();
+            if (!res.ok) return;
+            document.getElementById('subjectContainer').innerHTML = html;
+        } catch (err) {
+            console.error("Subject error:", err);
+        }
+    }
+
+    // ===== (TUỲ CHỌN) Nếu bạn muốn Rank load theo AJAX giống 2 khối dưới =====
+    async function loadRank() {
+        try {
+            const url = `@Url.Action("RankSummaryPartial", "HocSinh")`;
+            const res = await fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } });
+            const html = await res.text();
+            if (!res.ok) return;
+            document.getElementById('rankContainer').innerHTML = html;
+        } catch (err) {
+            console.error("Rank error:", err);
+        }
+    }
+
+    document.addEventListener('click', function (e) {
+        const recentBtn = e.target.closest('.js-recent');
+        if (recentBtn) {
+            e.preventDefault();
+            if (recentBtn.classList.contains('disabled') || recentBtn.getAttribute('aria-disabled') === 'true') return;
+            loadRecent(recentBtn.dataset.page, recentBtn.dataset.size);
+            return;
+        }
+
+        const subjectBtn = e.target.closest('.js-subject');
+        if (subjectBtn) {
+            e.preventDefault();
+            if (subjectBtn.classList.contains('disabled') || subjectBtn.getAttribute('aria-disabled') === 'true') return;
+            loadSubject(subjectBtn.dataset.page, subjectBtn.dataset.size);
+            return;
+        }
+    });
+
+    // Nếu muốn AJAX rank thì bật dòng này (không bắt buộc)
+    // document.addEventListener('DOMContentLoaded', loadRank);
+</script>

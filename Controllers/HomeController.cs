@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using ShopT2.Models;
+using QLSV.Models;
 
 namespace ShopT2.Controllers
 {

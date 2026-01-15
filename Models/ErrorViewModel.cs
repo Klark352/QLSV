@@ -1,4 +1,4 @@
-namespace ShopT2.Models
+namespace QLSV.Models
 {
     public class ErrorViewModel
     {

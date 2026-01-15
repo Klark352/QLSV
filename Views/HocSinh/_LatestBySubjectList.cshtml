@@ -1,0 +1,81 @@
+﻿@model QLSV.Models.StudentDashboardVM
+
+<div class="content-card animate-in" data-role="subject-root"
+     data-page="@Model.LatestBySubjectPaged.Page"
+     data-size="@Model.LatestBySubjectPaged.PageSize">
+    <div class="content-card-header d-flex align-items-center justify-content-between">
+        <h2 class="content-card-title">
+            <i class="fas fa-list-check primary"></i> Điểm mới nhất theo môn
+        </h2>
+        <div class="text-muted" style="font-size:.9rem;">
+            Trang @Model.LatestBySubjectPaged.Page / @Model.LatestBySubjectPaged.TotalPages
+        </div>
+    </div>
+
+    <div class="content-card-body">
+        @if (Model.LatestBySubjectPaged.Items == null || Model.LatestBySubjectPaged.Items.Count == 0)
+        {
+            <div class="empty-state">
+                <i class="fas fa-folder-open"></i>
+                <div class="empty-state-title">Chưa có dữ liệu</div>
+                <div class="empty-state-text">Điểm theo môn sẽ xuất hiện tại đây</div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted" style="font-size:.9rem;">
+                    Tổng: @Model.LatestBySubjectPaged.TotalItems môn
+                </div>
+
+                <div class="btn-group">
+                    <a href="#"
+                       class="btn btn-sm btn-outline-secondary js-subject @(Model.LatestBySubjectPaged.HasPrev ? "" : "disabled")"
+                       aria-disabled="@(Model.LatestBySubjectPaged.HasPrev ? "false" : "true")"
+                       data-page="@Math.Max(1, Model.LatestBySubjectPaged.Page - 1)"
+                       data-size="@Model.LatestBySubjectPaged.PageSize">
+                        ‹ Trước
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-sm btn-outline-secondary js-subject @(Model.LatestBySubjectPaged.HasNext ? "" : "disabled")"
+                       aria-disabled="@(Model.LatestBySubjectPaged.HasNext ? "false" : "true")"
+                       data-page="@(Model.LatestBySubjectPaged.Page + 1)"
+                       data-size="@Model.LatestBySubjectPaged.PageSize">
+                        Sau ›
+                    </a>
+                </div>
+            </div>
+            <br />
+
+            @foreach (var s in Model.LatestBySubjectPaged.Items)
+            {
+                <div class="subject-list-item" style="padding:10px;">
+                    <div class="subject-info">
+                        <div class="subject-title">
+                            <i class="fas fa-book" style="color:#667eea;font-size:.875rem;"></i>
+                            @s.TenMonHoc
+                        </div>
+                        <div class="subject-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt" style="font-size:.75rem;"></i>
+                                <span>Kỳ @s.KiHoc</span>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(s.TenGiaoVien))
+                            {
+                                <div class="meta-item">
+                                    <i class="fas fa-user-tie" style="font-size:.75rem;"></i>
+                                    <span>@s.TenGiaoVien</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="subject-score-container">
+                        <div class="subject-score">@(s.DiemTongHop?.ToString("0.00") ?? "—")</div>
+                        <div class="subject-date">@s.NgayCapNhat.ToString("dd/MM/yyyy")</div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

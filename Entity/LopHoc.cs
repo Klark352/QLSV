@@ -23,7 +23,5 @@ public partial class LopHoc
 
     public virtual GiaoVien? IdGiaoVienChuNhiemNavigation { get; set; }
 
-    public virtual ICollection<LichNgayLopHoc> LichNgayLopHocs { get; set; } = new List<LichNgayLopHoc>();
-
     public virtual ICollection<LopHocMonHoc> LopHocMonHocs { get; set; } = new List<LopHocMonHoc>();
 }

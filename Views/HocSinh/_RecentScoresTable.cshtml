@@ -1,0 +1,140 @@
+﻿@model QLSV.Models.StudentDashboardVM
+
+@functions {
+    string Badge(double v) => v >= 8 ? "excellent" : v >= 6.5 ? "good" : v >= 5 ? "average" : "poor";
+}
+
+<div class="content-card animate-in" data-role="recent-root"
+     data-page="@Model.RecentScoresPaged.Page"
+     data-size="@Model.RecentScoresPaged.PageSize">
+    <div class="content-card-header d-flex align-items-center justify-content-between">
+        <h2 class="content-card-title">
+            <i class="fas fa-bell danger"></i> Điểm cập nhật gần đây
+        </h2>
+        <div class="text-muted" style="font-size:.9rem;">
+            Trang @Model.RecentScoresPaged.Page / @Model.RecentScoresPaged.TotalPages
+        </div>
+    </div>
+
+    <div class="content-card-body">
+        @if (Model.RecentScoresPaged.Items == null || Model.RecentScoresPaged.Items.Count == 0)
+        {
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <div class="empty-state-title">Chưa có dữ liệu</div>
+                <div class="empty-state-text">Các bản ghi điểm mới sẽ hiển thị tại đây</div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted" style="font-size:.9rem;">
+                    Tổng: @Model.RecentScoresPaged.TotalItems bản ghi
+                </div>
+
+                <div class="btn-group">
+                    <a href="#"
+                       class="btn btn-sm btn-outline-secondary js-recent @(Model.RecentScoresPaged.HasPrev ? "" : "disabled")"
+                       aria-disabled="@(Model.RecentScoresPaged.HasPrev ? "false" : "true")"
+                       data-page="@Math.Max(1, Model.RecentScoresPaged.Page - 1)"
+                       data-size="@Model.RecentScoresPaged.PageSize">
+                        ‹ Trước
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-sm btn-outline-secondary js-recent @(Model.RecentScoresPaged.HasNext ? "" : "disabled")"
+                       aria-disabled="@(Model.RecentScoresPaged.HasNext ? "false" : "true")"
+                       data-page="@(Model.RecentScoresPaged.Page + 1)"
+                       data-size="@Model.RecentScoresPaged.PageSize">
+                        Sau ›
+                    </a>
+                </div>
+            </div>
+            <br/>
+
+            <div style="overflow-x:auto;">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">Môn học</th>
+                            <th class="text-center" style="width: 8%;">15'</th>
+                            <th class="text-center" style="width: 8%;">45'</th>
+                            <th class="text-center" style="width: 8%;">HK</th>
+                            <th class="text-center" style="width: 9%;">TB</th>
+                            <th class="text-end" style="width: 15%;">Cập nhật</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model.RecentScoresPaged.Items)
+                        {
+                            <tr>
+                                <td><div class="subject-name">@x.TenMonHoc</div></td>
+
+                                <td class="text-center">
+                                    @if (x.Diem15.HasValue)
+                                    {
+                                        <span class="score-badge @Badge(x.Diem15.Value)">@x.Diem15.Value.ToString("0.0")</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="score-badge empty">—</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    @if (x.Diem45.HasValue)
+                                    {
+                                        <span class="score-badge @Badge(x.Diem45.Value)">@x.Diem45.Value.ToString("0.0")</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="score-badge empty">—</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    @if (x.DiemHocKi.HasValue)
+                                    {
+                                        <span class="score-badge @Badge(x.DiemHocKi.Value)">@x.DiemHocKi.Value.ToString("0.0")</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="score-badge empty">—</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    @if (x.DiemTongHop.HasValue)
+                                    {
+                                        <span class="score-badge @Badge(x.DiemTongHop.Value)"><strong>@x.DiemTongHop.Value.ToString("0.00")</strong></span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="score-badge empty">—</span>
+                                    }
+                                </td>
+
+                                <td class="text-end">
+                                    <small class="text-muted">@x.NgayCapNhat.ToString("dd/MM HH:mm")</small>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="info-note mt-3">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Chú thích:</strong>
+                    <span style="color:#065F46;">■ Giỏi (≥8.0)</span>,
+                    <span style="color:#1E40AF;">■ Khá (6.5-7.9)</span>,
+                    <span style="color:#92400E;">■ TB (5.0-6.4)</span>,
+                    <span style="color:#991B1B;">■ Yếu (&lt;5.0)</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>

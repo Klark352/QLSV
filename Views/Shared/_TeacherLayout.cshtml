@@ -180,44 +180,18 @@
                                         <p>Danh sách lớp</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a asp-controller="GiaoVien" asp-action="LichGiangDay" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Lịch giảng dạy</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                         <!--end::Lớp giảng dạy-->
                         <!--begin::Quản lý điểm-->
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a asp-controller="GiaoVien" asp-action="Diem class="nav-link">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
                                 <p>
                                     Quản lý điểm
                                     <i class="nav-arrow bi bi-chevron-right"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="GiaoVien" asp-action="NhapDiem" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Nhập điểm</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="GiaoVien" asp-action="SuaDiem" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Sửa điểm</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="GiaoVien" asp-action="BangDiem" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Xem bảng điểm</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <!--end::Quản lý điểm-->
                         <!--begin::Danh sách Sinh viên-->
@@ -230,37 +204,12 @@
                         <!--end::Danh sách Sinh viên-->
                         <!--begin::Báo cáo-->
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-chart-line"></i>
-                                <p>
-                                    Báo cáo
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
+                            <a asp-controller="GiaoVien" asp-action="BaoCaoKetQua" class="nav-link">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>Kết quả học tập</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="GiaoVien" asp-action="BaoCaoKetQua" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Kết quả học tập</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="GiaoVien" asp-action="BaoCaoHanhKiem" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>Hạnh kiểm</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        </li>                     
                         <!--end::Báo cáo-->
-                        <!--begin::Thông báo-->
-                        @* <li class="nav-item">
-                            <a asp-controller="GiaoVien" asp-action="ThongBao" class="nav-link">
-                                <i class="nav-icon fas fa-bullhorn"></i>
-                                <p>Thông báo</p>
-                            </a>
-                        </li> *@
-                        <!--end::Thông báo-->
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>

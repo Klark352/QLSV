@@ -23,11 +23,11 @@ public partial class MonHoc
 
     public int SoTinChi { get; set; }
 
+    public string? TenVietTat { get; set; }
+
     public virtual ICollection<BangDiem> BangDiems { get; set; } = new List<BangDiem>();
 
     public virtual GiaoVien? IdGiaoVienNavigation { get; set; }
 
     public virtual ICollection<LopHocMonHoc> LopHocMonHocs { get; set; } = new List<LopHocMonHoc>();
-
-    public virtual ICollection<ThoiKhoaBieuChiTiet> ThoiKhoaBieuChiTiets { get; set; } = new List<ThoiKhoaBieuChiTiet>();
 }

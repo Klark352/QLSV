@@ -1,0 +1,276 @@
+﻿@model (DiemHocKiViewModel hk1, DiemHocKiViewModel hk2, DiemHocKiViewModel tongKet)
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewData["Title"] = "Xem điểm";
+
+    string Badge10(double? v)
+    {
+        if (!v.HasValue) return "badge bg-secondary";
+        if (v.Value >= 8.5) return "badge bg-success";
+        if (v.Value >= 7.0) return "badge bg-primary";
+        if (v.Value >= 5.0) return "badge bg-warning text-dark";
+        return "badge bg-danger";
+    }
+
+    string Badge4(double? v)
+    {
+        if (!v.HasValue) return "badge bg-secondary";
+        if (v.Value >= 3.5) return "badge bg-success";
+        if (v.Value >= 3.0) return "badge bg-primary";
+        if (v.Value >= 2.0) return "badge bg-warning text-dark";
+        return "badge bg-danger";
+    }
+
+    string fmt(double? v) => v.HasValue ? v.Value.ToString("0.00") : "—";
+    string fmtInt(int? v) => v.HasValue ? v.Value.ToString() : "—";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2">
+            <div>
+                <h1 class="mb-1">📚 Xem điểm - @Model.hk1.NamHoc</h1>
+                <div class="text-muted">
+                    Hiển thị điểm hệ 10 & hệ 4 (GPA hệ 4 tính theo <b>tín chỉ</b>)
+                </div>
+            </div>
+
+            <a asp-controller="HocSinh" asp-action="Dashboard" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> Về Dashboard
+            </a>
+        </div>
+
+        <div class="row g-2 mt-3">
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small">HK1</div>
+                            <div class="fw-bold">ĐTB (H10): <span class="@Badge10(Model.hk1.DTB)">@fmt(Model.hk1.DTB)</span></div>
+                            <div class="fw-bold">GPA (H4): <span class="@Badge4(Model.hk1.GPA4)">@fmt(Model.hk1.GPA4)</span></div>
+                        </div>
+                        <i class="bi bi-1-circle fs-2 text-muted"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small">HK2</div>
+                            <div class="fw-bold">ĐTB (H10): <span class="@Badge10(Model.hk2.DTB)">@fmt(Model.hk2.DTB)</span></div>
+                            <div class="fw-bold">GPA (H4): <span class="@Badge4(Model.hk2.GPA4)">@fmt(Model.hk2.GPA4)</span></div>
+                        </div>
+                        <i class="bi bi-2-circle fs-2 text-muted"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small">Cả năm (tổng kết)</div>
+                            <div class="fw-bold">ĐTB (H10): <span class="@Badge10(Model.tongKet.DTB)">@fmt(Model.tongKet.DTB)</span></div>
+                            <div class="fw-bold">GPA (H4): <span class="@Badge4(Model.tongKet.GPA4)">@fmt(Model.tongKet.GPA4)</span></div>
+                        </div>
+                        <i class="bi bi-award fs-2 text-muted"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+
+    <ul class="nav nav-pills gap-2 mb-3" id="scoreTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="hk1-tab" data-bs-toggle="pill" data-bs-target="#hk1" type="button" role="tab">
+                HK1
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="hk2-tab" data-bs-toggle="pill" data-bs-target="#hk2" type="button" role="tab">
+                HK2
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="year-tab" data-bs-toggle="pill" data-bs-target="#year" type="button" role="tab">
+                Tổng kết năm
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="scoreTabsContent">
+
+        <!-- HK1 -->
+        <div class="tab-pane fade show active" id="hk1" role="tabpanel" aria-labelledby="hk1-tab">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div class="fw-bold">Điểm học kỳ 1</div>
+                    <div class="text-muted small">
+                        ĐTB (H10): <b>@fmt(Model.hk1.DTB)</b> • GPA (H4): <b>@fmt(Model.hk1.GPA4)</b>
+                    </div>
+                </div>
+
+                <div class="card-body table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Môn</th>
+                                <th class="text-center" style="width:90px;">TC</th>
+                                <th class="text-center" style="width:90px;">15p</th>
+                                <th class="text-center" style="width:90px;">45p</th>
+                                <th class="text-center" style="width:90px;">HK</th>
+                                <th class="text-center" style="width:110px;">TK (H10)</th>
+                                <th class="text-center" style="width:110px;">TK (H4)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.hk1.Rows == null || Model.hk1.Rows.Count == 0)
+                            {
+                                <tr><td colspan="7" class="text-center text-muted py-4">Chưa có dữ liệu.</td></tr>
+                            }
+                            else
+                            {
+                                @foreach (var r in Model.hk1.Rows)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@r.TenMonHoc</td>
+                                        <td class="text-center">@fmtInt(r.SoTinChi)</td>
+                                        <td class="text-center">@fmt(r.Diem15p)</td>
+                                        <td class="text-center">@fmt(r.Diem45p)</td>
+                                        <td class="text-center">@fmt(r.DiemHK)</td>
+                                        <td class="text-center">
+                                            <span class="@Badge10(r.DiemTongKetMon)">@fmt(r.DiemTongKetMon)</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="@Badge4(r.DiemTongKetHe4)">@fmt(r.DiemTongKetHe4)</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer bg-white text-muted small">
+                    GPA hệ 4 được tính theo tín chỉ: Σ(điểm H4 × tín chỉ) / Σ(tín chỉ).
+                </div>
+            </div>
+        </div>
+
+        <!-- HK2 -->
+        <div class="tab-pane fade" id="hk2" role="tabpanel" aria-labelledby="hk2-tab">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div class="fw-bold">Điểm học kỳ 2</div>
+                    <div class="text-muted small">
+                        ĐTB (H10): <b>@fmt(Model.hk2.DTB)</b> • GPA (H4): <b>@fmt(Model.hk2.GPA4)</b>
+                    </div>
+                </div>
+
+                <div class="card-body table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Môn</th>
+                                <th class="text-center" style="width:90px;">TC</th>
+                                <th class="text-center" style="width:90px;">15p</th>
+                                <th class="text-center" style="width:90px;">45p</th>
+                                <th class="text-center" style="width:90px;">HK</th>
+                                <th class="text-center" style="width:110px;">TK (H10)</th>
+                                <th class="text-center" style="width:110px;">TK (H4)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.hk2.Rows == null || Model.hk2.Rows.Count == 0)
+                            {
+                                <tr><td colspan="7" class="text-center text-muted py-4">Chưa có dữ liệu.</td></tr>
+                            }
+                            else
+                            {
+                                @foreach (var r in Model.hk2.Rows)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@r.TenMonHoc</td>
+                                        <td class="text-center">@fmtInt(r.SoTinChi)</td>
+                                        <td class="text-center">@fmt(r.Diem15p)</td>
+                                        <td class="text-center">@fmt(r.Diem45p)</td>
+                                        <td class="text-center">@fmt(r.DiemHK)</td>
+                                        <td class="text-center">
+                                            <span class="@Badge10(r.DiemTongKetMon)">@fmt(r.DiemTongKetMon)</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="@Badge4(r.DiemTongKetHe4)">@fmt(r.DiemTongKetHe4)</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer bg-white text-muted small">
+                    GPA hệ 4 được tính theo tín chỉ: Σ(điểm H4 × tín chỉ) / Σ(tín chỉ).
+                </div>
+            </div>
+        </div>
+
+        <!-- Year -->
+        <div class="tab-pane fade" id="year" role="tabpanel" aria-labelledby="year-tab">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div class="fw-bold">Tổng kết năm</div>
+                    <div class="text-muted small">
+                        ĐTB (H10): <b>@fmt(Model.tongKet.DTB)</b> • GPA (H4): <b>@fmt(Model.tongKet.GPA4)</b>
+                    </div>
+                </div>
+
+                <div class="card-body table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Môn</th>
+                                <th class="text-center" style="width:90px;">TC</th>
+                                <th class="text-center" style="width:120px;">TK Năm (H10)</th>
+                                <th class="text-center" style="width:120px;">TK Năm (H4)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.tongKet.Rows == null || Model.tongKet.Rows.Count == 0)
+                            {
+                                <tr><td colspan="4" class="text-center text-muted py-4">Chưa có dữ liệu.</td></tr>
+                            }
+                            else
+                            {
+                                @foreach (var r in Model.tongKet.Rows)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@r.TenMonHoc</td>
+                                        <td class="text-center">@fmtInt(r.SoTinChi)</td>
+                                        <td class="text-center">
+                                            <span class="@Badge10(r.DiemTongKetMon)">@fmt(r.DiemTongKetMon)</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="@Badge4(r.DiemTongKetHe4)">@fmt(r.DiemTongKetHe4)</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer bg-white">
+                    <div class="text-muted small">
+                        <b>Tổng kết năm</b>: mỗi môn lấy trung bình 2 kỳ (nếu thiếu kỳ sẽ lấy kỳ còn lại). GPA hệ 4 tính theo tín chỉ.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
