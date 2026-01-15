@@ -23,8 +23,6 @@ public partial class HocSinh
 
     public virtual ICollection<BangDiem> BangDiems { get; set; } = new List<BangDiem>();
 
-    public virtual ICollection<HanhKiem> HanhKiems { get; set; } = new List<HanhKiem>();
-
     public virtual LopHoc? IdLopHocNavigation { get; set; }
 
     public virtual TaiKhoan? IdTaiKhoanNavigation { get; set; }

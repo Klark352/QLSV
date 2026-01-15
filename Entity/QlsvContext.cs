@@ -19,11 +19,7 @@ public partial class QlsvContext : DbContext
 
     public virtual DbSet<GiaoVien> GiaoViens { get; set; }
 
-    public virtual DbSet<HanhKiem> HanhKiems { get; set; }
-
     public virtual DbSet<HocSinh> HocSinhs { get; set; }
-
-    public virtual DbSet<LichNgayLopHoc> LichNgayLopHocs { get; set; }
 
     public virtual DbSet<LopHoc> LopHocs { get; set; }
 
@@ -32,8 +28,6 @@ public partial class QlsvContext : DbContext
     public virtual DbSet<MonHoc> MonHocs { get; set; }
 
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
-
-    public virtual DbSet<ThoiKhoaBieuChiTiet> ThoiKhoaBieuChiTiets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -111,41 +105,6 @@ public partial class QlsvContext : DbContext
                 .HasConstraintName("FK_GiaoVien_TaiKhoan");
         });
 
-        modelBuilder.Entity<HanhKiem>(entity =>
-        {
-            entity.HasKey(e => e.IdHanhKiem).HasName("PK__HanhKiem__FCED02708EDF44C3");
-
-            entity.ToTable("HanhKiem", tb => tb.HasTrigger("TR_HanhKiem_SetNgayCapNhat"));
-
-            entity.HasIndex(e => new { e.IdHocSinh, e.NamHoc, e.KiHoc }, "UX_HanhKiem_HS_NamHoc_KiHoc").IsUnique();
-
-            entity.Property(e => e.IdHanhKiem).HasColumnName("idHanhKiem");
-            entity.Property(e => e.IdHocSinh).HasColumnName("idHocSinh");
-            entity.Property(e => e.KiHoc).HasColumnName("kiHoc");
-            entity.Property(e => e.NamHoc)
-                .HasMaxLength(20)
-                .HasColumnName("namHoc");
-            entity.Property(e => e.NgayCapNhat)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("ngayCapNhat");
-            entity.Property(e => e.NgayTao)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("ngayTao");
-            entity.Property(e => e.NhanXet)
-                .HasMaxLength(500)
-                .HasColumnName("nhanXet");
-            entity.Property(e => e.XepLoai)
-                .HasMaxLength(20)
-                .HasColumnName("xepLoai");
-
-            entity.HasOne(d => d.IdHocSinhNavigation).WithMany(p => p.HanhKiems)
-                .HasForeignKey(d => d.IdHocSinh)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_HanhKiem_HocSinh");
-        });
-
         modelBuilder.Entity<HocSinh>(entity =>
         {
             entity.HasKey(e => e.IdHocSinh).HasName("PK__HocSinh__4EFFBFB612BE3CDE");
@@ -184,42 +143,6 @@ public partial class QlsvContext : DbContext
             entity.HasOne(d => d.IdTaiKhoanNavigation).WithOne(p => p.HocSinh)
                 .HasForeignKey<HocSinh>(d => d.IdTaiKhoan)
                 .HasConstraintName("FK_HocSinh_TaiKhoan");
-        });
-
-        modelBuilder.Entity<LichNgayLopHoc>(entity =>
-        {
-            entity.HasKey(e => e.IdLichNgay).HasName("PK__LichNgay__0B8AF2B855407F60");
-
-            entity.ToTable("LichNgay_LopHoc");
-
-            entity.HasIndex(e => new { e.IdLopHoc, e.NamHoc, e.KiHoc, e.Ngay }, "UX_LichNgay_LopHoc").IsUnique();
-
-            entity.Property(e => e.IdLichNgay).HasColumnName("idLichNgay");
-            entity.Property(e => e.GhiChu)
-                .HasMaxLength(200)
-                .HasColumnName("ghiChu");
-            entity.Property(e => e.IdLopHoc).HasColumnName("idLopHoc");
-            entity.Property(e => e.KiHoc).HasColumnName("kiHoc");
-            entity.Property(e => e.NamHoc)
-                .HasMaxLength(20)
-                .HasColumnName("namHoc");
-            entity.Property(e => e.Ngay).HasColumnName("ngay");
-            entity.Property(e => e.NgayCapNhat)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("ngayCapNhat");
-            entity.Property(e => e.NgayTao)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("ngayTao");
-            entity.Property(e => e.Thu).HasColumnName("thu");
-            entity.Property(e => e.TrangThai).HasColumnName("trangThai");
-            entity.Property(e => e.Tuan).HasColumnName("tuan");
-
-            entity.HasOne(d => d.IdLopHocNavigation).WithMany(p => p.LichNgayLopHocs)
-                .HasForeignKey(d => d.IdLopHoc)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_LichNgay_LopHoc");
         });
 
         modelBuilder.Entity<LopHoc>(entity =>
@@ -308,6 +231,11 @@ public partial class QlsvContext : DbContext
             entity.Property(e => e.TenMonHoc)
                 .HasMaxLength(50)
                 .HasColumnName("tenMonHoc");
+            entity.Property(e => e.TenVietTat)
+                .HasMaxLength(4)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("tenVietTat");
 
             entity.HasOne(d => d.IdGiaoVienNavigation).WithMany(p => p.MonHocs)
                 .HasForeignKey(d => d.IdGiaoVien)
@@ -345,48 +273,6 @@ public partial class QlsvContext : DbContext
             entity.Property(e => e.TrangThai)
                 .HasDefaultValue(1)
                 .HasColumnName("trangThai");
-        });
-
-        modelBuilder.Entity<ThoiKhoaBieuChiTiet>(entity =>
-        {
-            entity.HasKey(e => e.IdTkbCt).HasName("PK__ThoiKhoa__2B277B1F5868005E");
-
-            entity.ToTable("ThoiKhoaBieu_ChiTiet", tb => tb.HasTrigger("TR_TkbCT_SetNgayCapNhat"));
-
-            entity.HasIndex(e => new { e.IdLichNgay, e.Tiet }, "UX_TkbCT_LichNgay_Tiet").IsUnique();
-
-            entity.Property(e => e.IdTkbCt).HasColumnName("idTkbCT");
-            entity.Property(e => e.GhiChu)
-                .HasMaxLength(200)
-                .HasColumnName("ghiChu");
-            entity.Property(e => e.IdGiaoVien).HasColumnName("idGiaoVien");
-            entity.Property(e => e.IdLichNgay).HasColumnName("idLichNgay");
-            entity.Property(e => e.IdMonHoc).HasColumnName("idMonHoc");
-            entity.Property(e => e.NgayCapNhat)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("ngayCapNhat");
-            entity.Property(e => e.NgayTao)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("ngayTao");
-            entity.Property(e => e.Phong)
-                .HasMaxLength(20)
-                .HasColumnName("phong");
-            entity.Property(e => e.Tiet).HasColumnName("tiet");
-
-            entity.HasOne(d => d.IdGiaoVienNavigation).WithMany(p => p.ThoiKhoaBieuChiTiets)
-                .HasForeignKey(d => d.IdGiaoVien)
-                .HasConstraintName("FK_TkbCT_GiaoVien");
-
-            entity.HasOne(d => d.IdLichNgayNavigation).WithMany(p => p.ThoiKhoaBieuChiTiets)
-                .HasForeignKey(d => d.IdLichNgay)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TkbCT_LichNgay");
-
-            entity.HasOne(d => d.IdMonHocNavigation).WithMany(p => p.ThoiKhoaBieuChiTiets)
-                .HasForeignKey(d => d.IdMonHoc)
-                .HasConstraintName("FK_TkbCT_MonHoc");
         });
 
         OnModelCreatingPartial(modelBuilder);

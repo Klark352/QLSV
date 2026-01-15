@@ -1,0 +1,180 @@
+﻿@model QLSV.Models.StudentDashboardVM
+
+@{
+    var rank = Model.XepHangTrongLop;
+    var total = Model.TongHocSinhTrongLop;
+    var top = Model.TopPercentTrongLop;
+
+    var hasRank = rank.HasValue && total > 0;
+    var ratio = hasRank ? (rank!.Value * 100.0 / total) : 0;
+    var progress = hasRank ? Math.Max(0, Math.Min(100, 100 - ratio)) : 0;
+
+    var badgeClass = !hasRank ? "average"
+        : ratio <= 10 ? "excellent"
+        : ratio <= 30 ? "good"
+        : ratio <= 60 ? "average"
+        : "poor";
+
+    var badgeText = !hasRank ? "Chưa có"
+        : ratio <= 10 ? "Xuất sắc"
+        : ratio <= 30 ? "Tốt"
+        : ratio <= 60 ? "Khá"
+        : "Cần cố gắng";
+
+    var top10Rows = Model.BangXepHangTop10 ?? new List<QLSV.Models.StudentDashboardVM.ClassRankRow>();
+    var aroundRows = Model.BangXepHangQuanhBan ?? new List<QLSV.Models.StudentDashboardVM.ClassRankRow>();
+}
+
+<div class="content-card animate-in h-100">
+    <div class="content-card-header">
+        <h2 class="content-card-title mb-0">
+            <i class="fas fa-ranking-star primary"></i> Xếp hạng trong lớp
+        </h2>
+    </div>
+
+    <div class="content-card-body">
+        @if (!hasRank)
+        {
+            <div class="dash-subtle">Chưa đủ dữ liệu để xếp hạng.</div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between align-items-end">
+                <div>
+                    <div class="dash-subtle">Vị trí</div>
+                    <div style="font-size:2rem;font-weight:800;line-height:1;">#@rank</div>
+                    <div class="dash-mini">/ @total học sinh</div>
+                </div>
+
+                <div style="text-align:right;">
+                    <div class="dash-subtle">Thuộc</div>
+                    <div style="font-size:1.2rem;font-weight:800;">
+                        Top @(top?.ToString("0.##") ?? ratio.ToString("0.##"))%
+                    </div>
+                    <span class="custom-badge @badgeClass mt-1">@badgeText</span>
+                </div>
+            </div>
+
+            <div class="progress-container mt-3">
+                <div class="progress-bar-custom">
+                    <div class="progress-fill" style="width:@progress%;"></div>
+                </div>
+            </div>
+
+            <div class="dash-subtle mt-2">
+                * Xếp theo ĐTB tổng hợp (lấy điểm mới nhất theo từng môn).
+            </div>
+
+            <hr class="my-3" />
+
+            <div class="row g-3 position-relative">
+
+                <!-- Divider (desktop) -->
+                <div class="d-none d-lg-block position-absolute top-0 bottom-0"
+                     style="left:50%; width:1px; background:rgba(15,23,42,.12);"></div>
+
+                <!-- LEFT: TOP 10 -->
+                <div class="col-12 col-lg-6 pe-lg-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div style="font-weight:700;">Top 10</div>
+                        <div class="dash-mini">Theo ĐTB</div>
+                    </div>
+
+                    @if (top10Rows.Count == 0)
+                    {
+                        <div class="dash-subtle">Chưa có dữ liệu Top 10.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70px;">Hạng</th>
+                                        <th>Học sinh</th>
+                                        <th class="text-end" style="width:90px;">ĐTB</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var r in top10Rows)
+                                    {
+                                        var isMe = r.IdHocSinh == Model.IdHocSinh;
+                                        <tr class="@(isMe ? "table-warning" : "")">
+                                            <td><span class="dash-pill" style="background:rgba(59,130,246,.10); color:#1D4ED8;">#@r.Hang</span></td>
+                                            <td style="font-weight:@(isMe ? "800" : "600");">
+                                                @r.TenHocSinh
+                                                @if (isMe)
+                                                {
+                                                    <span class="ms-2 custom-badge good">Bạn</span>
+                                                }
+                                            </td>
+                                            <td class="text-end" style="font-weight:@(isMe ? "800" : "600");">
+                                                @(r.Dtb?.ToString("0.00") ?? "—")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+                <!-- Divider (mobile/tablet) -->
+                <div class="col-12 d-lg-none">
+                    <hr class="my-1" style="opacity:.15;" />
+                </div>
+
+                <!-- RIGHT: AROUND ME -->
+                <div class="col-12 col-lg-6 ps-lg-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div style="font-weight:700;">Vị trí của bạn</div>
+                        <div class="dash-mini">Cập nhật thời điểm hiện tại</div>
+                    </div>
+
+                    @if (rank.HasValue && rank.Value <= 10)
+                    {
+                        <div class="dash-subtle">Bạn đang nằm trong <b>Top 10</b> 🎉</div>
+                    }
+                    else if (aroundRows.Count == 0)
+                    {
+                        <div class="dash-subtle">Chưa có dữ liệu quanh vị trí của bạn.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70px;">Hạng</th>
+                                        <th>Học sinh</th>
+                                        <th class="text-end" style="width:90px;">ĐTB</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var r in aroundRows)
+                                    {
+                                        var isMe = r.IdHocSinh == Model.IdHocSinh;
+                                        <tr class="@(isMe ? "table-warning" : "")">
+                                            <td><span class="dash-pill" style="background:rgba(59,130,246,.10); color:#1D4ED8;">#@r.Hang</span></td>
+                                            <td style="font-weight:@(isMe ? "800" : "600");">
+                                                @r.TenHocSinh
+                                                @if (isMe)
+                                                {
+                                                    <span class="ms-2 custom-badge good">Bạn</span>
+                                                }
+                                            </td>
+                                            <td class="text-end" style="font-weight:@(isMe ? "800" : "600");">
+                                                @(r.Dtb?.ToString("0.00") ?? "—")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

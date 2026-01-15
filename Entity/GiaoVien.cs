@@ -26,6 +26,4 @@ public partial class GiaoVien
     public virtual ICollection<LopHoc> LopHocs { get; set; } = new List<LopHoc>();
 
     public virtual ICollection<MonHoc> MonHocs { get; set; } = new List<MonHoc>();
-
-    public virtual ICollection<ThoiKhoaBieuChiTiet> ThoiKhoaBieuChiTiets { get; set; } = new List<ThoiKhoaBieuChiTiet>();
 }
