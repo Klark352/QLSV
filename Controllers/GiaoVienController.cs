@@ -58,42 +58,139 @@ namespace QLSV.Controllers
         public IActionResult LichGiangDay()
         {
             SetHeaderInfoFromClaims();
+            return RedirectToAction(nameof(LichGiangDayAsync));
+        }
+
+        public async Task<IActionResult> LichGiangDayAsync()
+        {
+            SetHeaderInfoFromClaims();
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
+
+            var items = await _db.ThoiKhoaBieuChiTiets
+                .AsNoTracking()
+                .Include(x => x.IdLichNgayNavigation)
+                    .ThenInclude(ln => ln.IdLopHocNavigation)
+                .Include(x => x.IdMonHocNavigation)
+                .Where(x => x.IdGiaoVien == id.Value)
+                .OrderBy(x => x.IdLichNgayNavigation!.Tuan)
+                .ThenBy(x => x.IdLichNgayNavigation!.Thu)
+                .ThenBy(x => x.Tiet)
+                .ToListAsync();
+
+            return View("LichGiangDay", items);
+        }
+
+        public async Task<IActionResult> NhapDiem()
+        {
+            SetHeaderInfoFromClaims();
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
+
+            var mon = await _db.MonHocs.AsNoTracking()
+                .Where(m => m.IdGiaoVien == id.Value)
+                .OrderBy(m => m.TenMonHoc)
+                .ToListAsync();
+
+            return View(mon);
+        }
+
+        public async Task<IActionResult> SuaDiem()
+        {
+            SetHeaderInfoFromClaims();
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
+
+            var mon = await _db.MonHocs.AsNoTracking()
+                .Where(m => m.IdGiaoVien == id.Value)
+                .OrderBy(m => m.TenMonHoc)
+                .ToListAsync();
+
+            return View(mon);
+        }
+
+        public async Task<IActionResult> BangDiem()
+        {
+            SetHeaderInfoFromClaims();
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
+
+            var monIds = await _db.MonHocs.AsNoTracking()
+                .Where(m => m.IdGiaoVien == id.Value)
+                .Select(m => m.IdMonHoc)
+                .ToListAsync();
+
+            var scores = await _db.BangDiems.AsNoTracking()
+                .Include(b => b.IdHocSinhNavigation)
+                .Include(b => b.IdMonHocNavigation)
+                .Where(b => monIds.Contains(b.IdMonHoc ?? 0))
+                .OrderByDescending(b => b.NgayCapNhat)
+                .Take(100)
+                .ToListAsync();
+
+            return View(scores);
+        }
+
+        public async Task<IActionResult> DanhSachHocSinh()
+        {
+            SetHeaderInfoFromClaims();
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
+
+            var lopIds = await _db.LopHocMonHocs.AsNoTracking()
+                .Include(x => x.IdMonHocNavigation)
+                .Where(x => x.IdMonHocNavigation!.IdGiaoVien == id.Value)
+                .Select(x => x.IdLopHoc)
+                .ToListAsync();
+
+            var lopCn = await _db.LopHocs.AsNoTracking()
+                .Where(l => l.IdGiaoVienChuNhiem == id.Value)
+                .Select(l => l.IdLopHoc)
+                .ToListAsync();
+
+            lopIds.AddRange(lopCn);
+            lopIds = lopIds.Distinct().ToList();
+
+            var hs = await _db.HocSinhs.AsNoTracking()
+                .Include(h => h.IdLopHocNavigation)
+                .Where(h => h.IdLopHoc != null && lopIds.Contains(h.IdLopHoc.Value))
+                .OrderBy(h => h.TenHocSinh)
+                .ToListAsync();
+
+            return View(hs);
+        }
+
+        public async Task<IActionResult> BaoCaoKetQua()
+        {
+            SetHeaderInfoFromClaims();
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
+
+            var monIds = await _db.MonHocs.AsNoTracking()
+                .Where(m => m.IdGiaoVien == id.Value)
+                .Select(m => m.IdMonHoc)
+                .ToListAsync();
+
+            ViewBag.TongBangDiem = await _db.BangDiems.CountAsync(b => monIds.Contains(b.IdMonHoc ?? 0));
+            ViewBag.CapNhatGanNhat = await _db.BangDiems
+                .Where(b => monIds.Contains(b.IdMonHoc ?? 0))
+                .MaxAsync(b => (DateTime?)b.NgayCapNhat);
+
             return View();
         }
 
-        public IActionResult NhapDiem()
+        public async Task<IActionResult> BaoCaoHanhKiem()
         {
             SetHeaderInfoFromClaims();
-            return View();
-        }
+            var id = GetTeacherId();
+            if (id == null) return RedirectToAction("Login", "Auth");
 
-        public IActionResult SuaDiem()
-        {
-            SetHeaderInfoFromClaims();
-            return View();
-        }
+            var lopCn = await _db.LopHocs.AsNoTracking()
+                .Where(l => l.IdGiaoVienChuNhiem == id.Value)
+                .Select(l => l.IdLopHoc)
+                .ToListAsync();
 
-        public IActionResult BangDiem()
-        {
-            SetHeaderInfoFromClaims();
-            return View();
-        }
-
-        public IActionResult DanhSachHocSinh()
-        {
-            SetHeaderInfoFromClaims();
-            return View();
-        }
-
-        public IActionResult BaoCaoKetQua()
-        {
-            SetHeaderInfoFromClaims();
-            return View();
-        }
-
-        public IActionResult BaoCaoHanhKiem()
-        {
-            SetHeaderInfoFromClaims();
+            ViewBag.TongHocSinhChuNhiem = await _db.HocSinhs.CountAsync(h => h.IdLopHoc != null && lopCn.Contains(h.IdLopHoc.Value));
             return View();
         }
 

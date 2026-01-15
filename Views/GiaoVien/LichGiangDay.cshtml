@@ -1,5 +1,48 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.ThoiKhoaBieuChiTiet>
+@{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     ViewData["Title"] = "Lịch giảng dạy";
 }
-<div class="p-3">Lịch giảng dạy (placeholder).</div>
+<div class="p-3">
+    <h4 class="fw-bold mb-3">Lịch giảng dạy</h4>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tuần</th>
+                        <th>Thứ</th>
+                        <th>Ngày</th>
+                        <th>Tiết</th>
+                        <th>Lớp</th>
+                        <th>Môn</th>
+                        <th>Phòng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="7" class="text-center text-muted py-3">Chưa có lịch giảng dạy.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            var lich = item.IdLichNgayNavigation;
+                            <tr>
+                                <td>@lich?.Tuan</td>
+                                <td>@lich?.Thu</td>
+                                <td>@lich?.Ngay.ToString("dd/MM/yyyy")</td>
+                                <td>@item.Tiet</td>
+                                <td>@lich?.IdLopHocNavigation?.TenLopHoc</td>
+                                <td>@item.IdMonHocNavigation?.TenMonHoc</td>
+                                <td>@item.Phong</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

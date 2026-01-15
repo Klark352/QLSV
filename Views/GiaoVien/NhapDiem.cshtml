@@ -1,5 +1,38 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.MonHoc>
+@{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     ViewData["Title"] = "Nhập điểm";
 }
-<div class="p-3">Nhập điểm (placeholder).</div>
+<div class="p-3">
+    <h4 class="fw-bold mb-3">Nhập điểm</h4>
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Môn học</th>
+                        <th>Kì</th>
+                        <th>Năm học</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="3" class="text-center text-muted py-3">Chưa được phân công môn.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var m in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@m.TenMonHoc</td>
+                                <td>@m.KiHoc</td>
+                                <td>@m.NamHoc</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,41 @@
-﻿@{
+﻿@model IEnumerable<QLSV.Entity.HocSinh>
+@{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     ViewData["Title"] = "Danh sách học sinh";
 }
-<div class="p-3">Danh sách học sinh (placeholder).</div>
+<div class="p-3">
+    <h4 class="fw-bold mb-3">Danh sách học sinh</h4>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tên học sinh</th>
+                        <th>Lớp</th>
+                        <th>Giới tính</th>
+                        <th>Ngày sinh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="4" class="text-center text-muted py-3">Chưa có học sinh.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var hs in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@hs.TenHocSinh</td>
+                                <td>@hs.IdLopHocNavigation?.TenLopHoc</td>
+                                <td>@hs.GioiTinh</td>
+                                <td>@(hs.NgaySinh?.ToString("dd/MM/yyyy") ?? "")</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
