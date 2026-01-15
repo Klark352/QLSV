@@ -120,7 +120,7 @@
             <!--begin::Sidebar Brand-->
             <div class="sidebar-brand">
                 <!--begin::Brand Link-->
-                <a asp-controller="Home" asp-action="Index" class="brand-link">
+                <a asp-controller="Admin" asp-action="Dashboard" class="brand-link">
                     <i class="fas fa-graduation-cap brand-icon"></i>
                     <!--begin::Brand Text-->
                     <span class="brand-text fw-light">QLSV - ADMIN</span>
@@ -136,7 +136,7 @@
                     <ul class="nav nav-pills sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
                         <!--begin::Dashboard-->
                         <li class="nav-item">
-                            <a asp-controller="Home" asp-action="Index" class="nav-link">
+                            <a asp-controller="Admin" asp-action="Dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Trang chủ</p>
                             </a>
@@ -144,7 +144,7 @@
                         <!--end::Dashboard-->
                         <!--begin::Quản lý học sinh-->
                         <li class="nav-item">
-                            <a asp-controller="HocSinh" asp-action="Index" class="nav-link">
+                            <a asp-controller="Admin" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-user-graduate"></i>
                                 <p>Quản lý học sinh</p>
                             </a>
@@ -160,7 +160,7 @@
                         <!--end::Quản lý giáo viên-->
                         <!--begin::Quản lý lớp học-->
                         <li class="nav-item">
-                            <a asp-controller="LopHoc" asp-action="Index" class="nav-link">
+                            <a asp-controller="Admin" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-school"></i>
                                 <p>Quản lý lớp học</p>
                             </a>
@@ -168,7 +168,7 @@
                         <!--end::Quản lý lớp học-->
                         <!--begin::Quản lý môn học-->
                         <li class="nav-item">
-                            <a asp-controller="MonHoc" asp-action="Index" class="nav-link">
+                            <a asp-controller="Admin" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>Quản lý môn học</p>
                             </a>
@@ -176,7 +176,7 @@
                         <!--end::Quản lý môn học-->
                         <!--begin::Quản lý bảng điểm-->
                         <li class="nav-item">
-                            <a asp-controller="BangDiem" asp-action="Index" class="nav-link">
+                            <a asp-controller="Admin" asp-action="BangDiem" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
                                 <p>Quản lý bảng điểm</p>
                             </a>
@@ -184,7 +184,7 @@
                         <!--end::Quản lý bảng điểm-->
                         <!--begin::Quản lý tài khoản-->
                         <li class="nav-item">
-                            <a asp-controller="TaiKhoan" asp-action="Index" class="nav-link">
+                            <a asp-controller="Admin" asp-action="TaiKhoan" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog"></i>
                                 <p>Quản lý tài khoản</p>
                             </a>
@@ -201,19 +201,19 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-controller="BaoCao" asp-action="ThongKeHocSinh" class="nav-link">
+                                    <a asp-controller="Admin" asp-action="ThongKeHocSinh" class="nav-link">
                                         <i class="nav-icon far fa-circle"></i>
                                         <p>Thống kê học sinh</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="BaoCao" asp-action="ThongKeGiaoVien" class="nav-link">
+                                    <a asp-controller="Admin" asp-action="ThongKeGiaoVien" class="nav-link">
                                         <i class="nav-icon far fa-circle"></i>
                                         <p>Thống kê giáo viên</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="BaoCao" asp-action="ThongKeDiem" class="nav-link">
+                                    <a asp-controller="Admin" asp-action="ThongKeDiem" class="nav-link">
                                         <i class="nav-icon far fa-circle"></i>
                                         <p>Thống kê điểm</p>
                                     </a>
