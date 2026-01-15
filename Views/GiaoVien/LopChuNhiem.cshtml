@@ -1,5 +1,62 @@
-﻿@{
+﻿@model QLSV.Models.GiaoVienOverviewVM
+@{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     ViewData["Title"] = "Lớp chủ nhiệm";
 }
-<div class="p-3">Lớp chủ nhiệm (placeholder).</div>
+
+<div class="p-3">
+    <h4 class="fw-bold mb-3">Lớp chủ nhiệm</h4>
+
+    @{ var lopCn = Model.LopChuNhiem.FirstOrDefault(); }
+
+    @if (lopCn == null || lopCn.IdLopHoc == null)
+    {
+        <div class="alert alert-info mb-0">Chưa được phân công lớp chủ nhiệm.</div>
+    }
+    else
+    {
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <div class="fw-bold fs-5">@lopCn.TenLopHoc</div>
+                        <div class="text-muted">@lopCn.TenKhoi • @lopCn.NamHoc</div>
+                    </div>
+                    <div class="badge bg-primary">@lopCn.HocSinhs.Count học sinh</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white border-0 fw-bold">Danh sách học sinh</div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tên học sinh</th>
+                            <th>Giới tính</th>
+                            <th>Ngày sinh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!lopCn.HocSinhs.Any())
+                        {
+                            <tr><td colspan="3" class="text-center text-muted py-3">Chưa có học sinh.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var hs in lopCn.HocSinhs)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@hs.TenHocSinh</td>
+                                    <td>@hs.GioiTinh</td>
+                                    <td>@(hs.NgaySinh?.ToString("dd/MM/yyyy") ?? "")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

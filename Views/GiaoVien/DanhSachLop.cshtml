@@ -1,5 +1,42 @@
-﻿@{
+﻿@model QLSV.Models.GiaoVienOverviewVM
+@{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     ViewData["Title"] = "Danh sách lớp";
 }
-<div class="p-3">Danh sách lớp (placeholder).</div>
+
+<div class="p-3">
+    <h4 class="fw-bold mb-3">Danh sách lớp giảng dạy</h4>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Lớp</th>
+                        <th>Khối</th>
+                        <th>Năm học</th>
+                        <th class="text-end">Số môn phụ trách</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.LopGiangDay.Any())
+                    {
+                        <tr><td colspan="4" class="text-center text-muted py-3">Chưa có phân công giảng dạy.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var lop in Model.LopGiangDay)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@lop.TenLopHoc</td>
+                                <td>@lop.TenKhoi</td>
+                                <td>@lop.NamHoc</td>
+                                <td class="text-end">@lop.SoMonPhuTrach</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

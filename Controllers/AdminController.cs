@@ -59,18 +59,23 @@ namespace QLSV.Controllers
         [HttpGet]
         public IActionResult CreateHocSinh()
         {
-            return View(new StudentVM());
+            return View(new AdminOverviewVM { IsTeacher = false });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateHocSinh(StudentVM model)
+        public async Task<IActionResult> CreateHocSinh(AdminOverviewVM model)
         {
+            if (model.IdLopHoc == null)
+            {
+                ModelState.AddModelError(nameof(model.IdLopHoc), "Vui lòng chọn lớp học");
+            }
+
             if (!ModelState.IsValid) return View(model);
 
             var entity = new HocSinh
             {
-                TenHocSinh = model.TenHocSinh!.Trim(),
+                TenHocSinh = model.Ten.Trim(),
                 GioiTinh = model.GioiTinh,
                 NgaySinh = model.NgaySinh,
                 IdLopHoc = model.IdLopHoc,
@@ -89,13 +94,14 @@ namespace QLSV.Controllers
             var hs = await _db.HocSinhs.AsNoTracking().FirstOrDefaultAsync(x => x.IdHocSinh == id);
             if (hs == null) return NotFound();
 
-            var vm = new StudentVM
+            var vm = new AdminOverviewVM
             {
                 Id = hs.IdHocSinh,
-                TenHocSinh = hs.TenHocSinh,
+                Ten = hs.TenHocSinh,
                 GioiTinh = hs.GioiTinh,
-                NgaySinh = hs.NgaySinh,
-                IdLopHoc = hs.IdLopHoc
+                NgaySinh = hs.NgaySinh ?? DateTime.Today.AddYears(-18),
+                IdLopHoc = hs.IdLopHoc,
+                IsTeacher = false
             };
 
             return View(vm);
@@ -103,15 +109,19 @@ namespace QLSV.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditHocSinh(int id, StudentVM model)
+        public async Task<IActionResult> EditHocSinh(int id, AdminOverviewVM model)
         {
             if (id != model.Id) return BadRequest();
+            if (model.IdLopHoc == null)
+            {
+                ModelState.AddModelError(nameof(model.IdLopHoc), "Vui lòng chọn lớp học");
+            }
             if (!ModelState.IsValid) return View(model);
 
             var hs = await _db.HocSinhs.FirstOrDefaultAsync(x => x.IdHocSinh == id);
             if (hs == null) return NotFound();
 
-            hs.TenHocSinh = model.TenHocSinh!.Trim();
+            hs.TenHocSinh = model.Ten.Trim();
             hs.GioiTinh = model.GioiTinh;
             hs.NgaySinh = model.NgaySinh;
             hs.IdLopHoc = model.IdLopHoc;
@@ -171,18 +181,18 @@ namespace QLSV.Controllers
         [HttpGet]
         public IActionResult CreateGiaoVien()
         {
-            return View(new TeacherVM());
+            return View(new AdminOverviewVM { IsTeacher = true });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateGiaoVien(TeacherVM model)
+        public async Task<IActionResult> CreateGiaoVien(AdminOverviewVM model)
         {
             if (!ModelState.IsValid) return View(model);
 
             var gv = new GiaoVien
             {
-                TenGiaoVien = model.TenGiaoVien!.Trim(),
+                TenGiaoVien = model.Ten.Trim(),
                 GioiTinh = model.GioiTinh,
                 NgaySinh = model.NgaySinh,
                 SoDienThoai = model.SoDienThoai,
@@ -201,13 +211,14 @@ namespace QLSV.Controllers
             var gv = await _db.GiaoViens.AsNoTracking().FirstOrDefaultAsync(x => x.IdGiaoVien == id);
             if (gv == null) return NotFound();
 
-            var vm = new TeacherVM
+            var vm = new AdminOverviewVM
             {
                 Id = gv.IdGiaoVien,
-                TenGiaoVien = gv.TenGiaoVien,
+                Ten = gv.TenGiaoVien,
                 GioiTinh = gv.GioiTinh,
                 NgaySinh = gv.NgaySinh,
-                SoDienThoai = gv.SoDienThoai
+                SoDienThoai = gv.SoDienThoai,
+                IsTeacher = true
             };
 
             return View(vm);
@@ -215,7 +226,7 @@ namespace QLSV.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditGiaoVien(int id, TeacherVM model)
+        public async Task<IActionResult> EditGiaoVien(int id, AdminOverviewVM model)
         {
             if (id != model.Id) return BadRequest();
             if (!ModelState.IsValid) return View(model);
@@ -223,7 +234,7 @@ namespace QLSV.Controllers
             var gv = await _db.GiaoViens.FirstOrDefaultAsync(x => x.IdGiaoVien == id);
             if (gv == null) return NotFound();
 
-            gv.TenGiaoVien = model.TenGiaoVien!.Trim();
+            gv.TenGiaoVien = model.Ten.Trim();
             gv.GioiTinh = model.GioiTinh;
             gv.NgaySinh = model.NgaySinh;
             gv.SoDienThoai = model.SoDienThoai;

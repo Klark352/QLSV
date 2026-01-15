@@ -1,4 +1,4 @@
-﻿@model QLSV.Models.TeacherVM
+﻿@model QLSV.Models.AdminOverviewVM
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Sửa giáo viên";
@@ -14,8 +14,8 @@
 
         <div class="mb-3">
             <label class="form-label">Tên giáo viên</label>
-            <input asp-for="TenGiaoVien" class="form-control" />
-            <span asp-validation-for="TenGiaoVien" class="text-danger"></span>
+            <input asp-for="Ten" class="form-control" />
+            <span asp-validation-for="Ten" class="text-danger"></span>
         </div>
 
         <div class="mb-3">

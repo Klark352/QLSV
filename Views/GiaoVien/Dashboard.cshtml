@@ -1,4 +1,90 @@
-﻿@{
+﻿@model QLSV.Models.GiaoVienOverviewVM
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
+
+<div class="p-3">
+    <h4 class="fw-bold mb-3">Xin chào, @Model.TenGiaoVien</h4>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Lớp chủ nhiệm</div>
+                    <div class="fs-3 fw-bold">@Model.SoLopChuNhiem</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Môn phụ trách</div>
+                    <div class="fs-3 fw-bold">@Model.SoMonPhuTrach</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Lớp giảng dạy</div>
+                    <div class="fs-3 fw-bold">@Model.SoLopGiangDay</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Số học sinh</div>
+                    <div class="fs-3 fw-bold">@Model.SoHocSinh</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 fw-bold">Lớp chủ nhiệm</div>
+                <ul class="list-group list-group-flush">
+                    @if (!Model.LopChuNhiem.Any())
+                    {
+                        <li class="list-group-item text-muted">Chưa được phân công.</li>
+                    }
+                    else
+                    {
+                        foreach (var lop in Model.LopChuNhiem)
+                        {
+                            <li class="list-group-item">
+                                <div class="fw-semibold">@lop.TenLopHoc</div>
+                                <div class="text-muted small">@lop.TenKhoi • @lop.NamHoc</div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 fw-bold">Lớp giảng dạy</div>
+                <ul class="list-group list-group-flush">
+                    @if (!Model.LopGiangDay.Any())
+                    {
+                        <li class="list-group-item text-muted">Chưa có phân công giảng dạy.</li>
+                    }
+                    else
+                    {
+                        foreach (var lop in Model.LopGiangDay)
+                        {
+                            <li class="list-group-item">
+                                <div class="fw-semibold">@lop.TenLopHoc</div>
+                                <div class="text-muted small">@lop.TenKhoi • @lop.NamHoc</div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
